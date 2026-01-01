@@ -1,0 +1,47 @@
+.feed {
+    flex: 5.5;
+    padding: 20px;
+    height: calc(100vh - 50px);
+    overflow-y: scroll; /* Allow vertical scrolling for the whole page */
+}
+
+.feedWrapper {
+    padding: 10px;
+}
+
+.feedSection {
+    margin-bottom: 40px; /* Space between the two rows */
+}
+
+.feedTitle {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #222;
+    border-left: 5px solid #ff6122; /* Wattpad Orange accent */
+    padding-left: 10px;
+}
+
+/* THE MAGIC CAROUSEL */
+.feedCarousel {
+    display: flex; /* Aligns items in a row */
+    overflow-x: auto; /* Enables horizontal scrolling */
+    padding-bottom: 15px; /* Space for scrollbar */
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar for the Carousel */
+.feedCarousel::-webkit-scrollbar {
+    height: 8px;
+}
+.feedCarousel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+.feedCarousel::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+.feedCarousel::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}

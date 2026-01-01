@@ -1,0 +1,30 @@
+.bookmarksContainer {
+    display: flex;
+    width: 100%;
+}
+
+.bookmarksRight {
+    flex: 9; /* Takes up the rest of the space next to sidebar */
+    padding: 20px;
+}
+
+.bookmarksTitle {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    border-bottom: 2px solid teal;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.bookmarksWrapper {
+    display: flex;
+    flex-wrap: wrap; /* Allows books to flow to the next line */
+    gap: 20px; /* Space between cards */
+}
+
+.noBookmarks {
+    font-size: 18px;
+    color: gray;
+    margin-top: 20px;
+}

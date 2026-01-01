@@ -1,0 +1,101 @@
+.single {
+    display: flex;
+    /* We don't use the 3-column layout here, we want focus on the book */
+    height: calc(100vh - 50px);
+    background-color: #f9f9f9; 
+}
+
+.singleWrapper {
+    flex: 9; /* Takes up most space */
+    padding: 20px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Book Header Info */
+.singleBookInfo {
+    width: 80%;
+    display: flex;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.singleBookCover {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.singleBookDesc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.singleTitle {
+    font-size: 32px;
+    margin: 0;
+    color: #333;
+}
+
+.singleAuthor {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.singleDescText {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* The Action Buttons */
+.singleBtn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.btnRead {
+    background-color: #ff6122; /* Wattpad Orange */
+    color: white;
+}
+
+.btnLib {
+    background-color: #eee;
+    color: #333;
+}
+
+/* The Chapter Content (Reading View) */
+.singleChapter {
+    width: 80%;
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    min-height: 500px;
+}
+
+.chapterTitle {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #444;
+}
+
+.chapterContent {
+    font-size: 18px;
+    line-height: 1.8; /* Good line height is crucial for reading */
+    color: #222;
+    white-space: pre-wrap; /* Preserves paragraphs and line breaks */
+}

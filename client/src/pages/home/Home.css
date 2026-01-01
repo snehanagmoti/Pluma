@@ -1,0 +1,5 @@
+/* client/src/pages/home/Home.css */
+.homeContainer {
+    display: flex; /* This aligns the 3 components in a row */
+    width: 100%;
+}

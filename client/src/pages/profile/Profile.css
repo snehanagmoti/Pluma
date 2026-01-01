@@ -1,0 +1,65 @@
+.profile {
+    display: flex;
+}
+
+.profileRight {
+    flex: 9;
+}
+
+.profileCover {
+    height: 320px;
+    position: relative;
+}
+
+.profileCoverImg {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.profileUserImg {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    top: 150px; /* Positions it half on cover, half off */
+    border: 3px solid white;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profileInfoName {
+    font-size: 24px;
+}
+
+.profileInfoDesc {
+    font-weight: 300;
+}
+
+.profileBooks {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.profileSectionTitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-left: 5px solid #ff6122;
+    padding-left: 10px;
+}
+
+.profileBookList {
+    display: flex;
+    flex-wrap: wrap; /* Allows books to wrap to next line */
+    gap: 20px;
+}
