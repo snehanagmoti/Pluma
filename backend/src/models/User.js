@@ -1,4 +1,4 @@
-// src/models/User.js
+// server/src/models/User.js
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
-      unique: true, // No two users can have the same username
+      unique: true,
       minlength: 3,
       maxlength: 20,
     },
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      default: "", // If they don't upload one, it stays empty
+      default: "",
     },
     coverPicture: {
       type: String,
@@ -31,15 +31,15 @@ const userSchema = new mongoose.Schema(
     },
     isPrivate: {
       type: Boolean,
-      default: false, // By default, profiles are public
+      default: false,
     },
     followers: {
       type: Array,
-      default: [], // Starts with 0 followers
+      default: [],
     },
     followings: {
       type: Array,
-      default: [], // Starts following 0 people
+      default: [],
     },
     isAdmin: {
       type: Boolean,
@@ -57,12 +57,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       maxlength: 50,
     },
-    library: {
-      type: Array, 
-      default: [] 
-    },
+
+    // CHANGED: Now properly references the Book model
+    library: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Book", // Critical for .populate()
+      },
+    ],
+
+    // NEW: Stores the AI-generated recommendations
+    recommendedForYou: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Book",
+      },
+    ],
   },
-  { timestamps: true } // Automatically adds "createdAt" and "updatedAt"
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("User", userSchema);

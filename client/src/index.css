@@ -1,0 +1,20 @@
+/* 1. RESET ALL DEFAULT MARGINS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Ensures padding doesn't break layouts */
+}
+
+/* 2. REMOVE BODY MARGIN */
+body {
+    margin: 0;
+    /* Removes the white border */
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    /* Prevents horizontal scrolling */
+    font-family: 'Poppins', sans-serif;
+    background-color: #fcfcfc;
+    /* Clean background for the whole app */
+}

@@ -1,37 +1,76 @@
+/* --- THE CARD CONTAINER --- */
 .bookCard {
-    width: 150px; /* Fixed width for each book */
-    margin-right: 20px; /* Space between books */
+    width: 170px;
+    /* Slightly wider for a premium feel */
+    background: white;
+    /* Clean white card base */
+    border-radius: 16px;
+    /* Smooth rounded corners */
+    padding: 10px;
+    /* Internal spacing creates a "frame" */
+    margin-right: 25px;
+    /* Space between cards */
     cursor: pointer;
-    transition: transform 0.2s;
-    flex-shrink: 0; /* Prevents the book from getting squished */
+
+    /* Initial State: Subtle Shadow */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
 }
 
+/* --- HOVER EFFECT --- */
 .bookCard:hover {
-    transform: scale(1.05); /* Slight pop effect on hover */
+    transform: translateY(-8px);
+    /* Lifts up nicely */
+    /* Pink Glow Shadow on Hover */
+    box-shadow: 0 12px 25px rgba(221, 36, 118, 0.15);
 }
 
+/* --- BOOK COVER IMAGE --- */
 .bookCover {
     width: 100%;
-    height: 220px;
+    height: 230px;
+    /* Taller height */
     object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    /* Inner radius slightly smaller than card */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
 }
 
+/* --- TEXT INFO --- */
 .bookInfo {
-    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 5px;
+    /* Tiny padding on sides of text */
 }
 
 .bookTitle {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 4px;
+
+    /* Truncate text with ... if too long */
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Adds "..." if title is too long */
+    text-overflow: ellipsis;
 }
 
 .bookAuthor {
-    font-size: 14px;
-    color: #777;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #888;
+    font-weight: 400;
+
+    /* Truncate author as well */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

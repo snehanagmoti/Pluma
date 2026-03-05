@@ -1,47 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,600&family=Poppins:wght@300;400;500;600&display=swap');
+
 .feed {
     flex: 5.5;
-    padding: 20px;
-    height: calc(100vh - 50px);
-    overflow-y: scroll; /* Allow vertical scrolling for the whole page */
+    padding: 30px;
+    height: calc(100vh - 70px);
+    overflow-y: scroll;
+
+    /* The Golden Hour Background */
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
 }
 
 .feedWrapper {
     padding: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .feedSection {
-    margin-bottom: 40px; /* Space between the two rows */
+    margin-bottom: 50px;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
+/* --- 1. HEADINGS WITH PLUMA GRADIENT --- */
 .feedTitle {
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #222;
-    border-left: 5px solid #ff6122; /* Wattpad Orange accent */
-    padding-left: 10px;
+    font-family: 'Dancing Script', cursive;
+    /* Matches Logo Font */
+    font-size: 38px;
+    /* Larger to make the cursive readable */
+    font-weight: 700;
+    margin-bottom: 20px;
+
+    /* THE PLUMA GRADIENT (Pink/Red) */
+    background: linear-gradient(to right, #ff512f, #dd2476);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Drop shadow to help it pop against the orange background */
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px;
 }
 
-/* THE MAGIC CAROUSEL */
+/* --- 2. SCROLLBARS WITH PLUMA GRADIENT --- */
+/* Horizontal Scrollbar (Carousel) */
 .feedCarousel {
-    display: flex; /* Aligns items in a row */
-    overflow-x: auto; /* Enables horizontal scrolling */
-    padding-bottom: 15px; /* Space for scrollbar */
+    display: flex;
+    overflow-x: auto;
+    padding: 10px 5px 25px 5px;
     scroll-behavior: smooth;
+    gap: 20px;
 }
 
-/* Custom Scrollbar for the Carousel */
 .feedCarousel::-webkit-scrollbar {
-    height: 8px;
+    height: 10px;
+    /* Slightly thicker to show the gradient better */
 }
+
 .feedCarousel::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    /* Semi-transparent white track */
+    border-radius: 10px;
 }
+
+/* The Gradient Thumb */
 .feedCarousel::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 4px;
+    background: linear-gradient(to right, #ff512f, #dd2476);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    /* White border makes it look like a capsule */
 }
+
 .feedCarousel::-webkit-scrollbar-thumb:hover {
-    background: #aaa;
+    background: linear-gradient(to right, #dd2476, #ff512f);
+    /* Reverses on hover */
+}
+
+/* Vertical Scrollbar (Main Page) */
+.feed::-webkit-scrollbar {
+    width: 8px;
+}
+
+.feed::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.feed::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #ff512f, #dd2476);
+    border-radius: 10px;
+}
+
+/* --- SEARCH FILTERS --- */
+.searchFilters {
+    margin-bottom: 30px;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.3);
+    /* Glassy White */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.filterLabel {
+    font-weight: 600;
+    color: #fff;
+    /* White text for contrast */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+}
+
+.radioText {
+    margin-left: 8px;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.wrapCarousel {
+    flex-wrap: wrap;
+    overflow-x: visible;
+}
+
+.noResults,
+.emptyLibrary {
+    color: white;
+    font-style: italic;
+    font-size: 18px;
+    padding: 10px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

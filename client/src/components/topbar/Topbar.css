@@ -1,100 +1,162 @@
-.topbarContainer {
-    height: 50px;
+/* Import Fonts (if not already in index.css) */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;700&display=swap');
+
+body,
+html {
+    margin: 0 !important;
+    padding: 0 !important;
     width: 100%;
-    background-color: #8a9db5; /* Facebook Blue */
+    overflow-x: hidden;
+    /* Prevents side-scrolling */
+}
+
+.topbarContainer {
+    height: 70px;
+    width: 100%;
+
+    /* --- FIX 1: Width Fix --- */
+    box-sizing: border-box;
+
+    /* --- FIX 2: Buttery Yellow Glass Background --- */
+    background: rgba(255, 250, 227, 0.95);
+    /* Soft Buttery Yellow */
+    backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
-    position: sticky; /* Keeps it at the top when scrolling */
+    position: sticky;
     top: 0;
     z-index: 999;
-}
-/* LEFT */
-.topbarLeft {
-    flex: 3; /* Takes 3 parts of space */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    padding: 0 20px;
 }
 
+/* --- LEFT: LOGO --- */
+.topbarLeft {
+    flex: 3;
+}
 
 .logo {
-    font-size: 24px;
-    margin-left: 20px;
-    font-weight: bold;
-    color: white;
+    font-family: 'Dancing Script', cursive;
+    /* Matching Login Page */
+    font-size: 32px;
+    font-weight: 700;
+    /* Gradient Text */
+    background: linear-gradient(to right, #ff512f, #dd2476);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     cursor: pointer;
+    transition: opacity 0.2s;
 }
 
-/* CENTER */
+.logo:hover {
+    opacity: 0.8;
+}
+
+/* --- CENTER: SEARCH --- */
 .topbarCenter {
-    flex: 5; /* Takes 5 parts (widest) */
+    flex: 5;
+    display: flex;
+    justify-content: center;
 }
 
 .searchbar {
     width: 100%;
-    height: 30px;
-    background-color: white;
-    border-radius: 30px;
+    max-width: 500px;
+    /* Limit width on big screens */
+    height: 45px;
+    background-color: #f0f2f5;
+    /* Light Gray for contrast */
+    border-radius: 50px;
+    /* Pill Shape */
     display: flex;
     align-items: center;
+    padding: 0 20px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.searchbar:focus-within {
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dd2476;
+    /* Pink border on focus */
 }
 
 .searchIcon {
-    font-size: 20px !important;
-    margin-left: 10px;
+    font-size: 18px !important;
+    color: #888;
 }
 
 .searchInput {
     border: none;
-    width: 70%;
-    padding-left: 10px; /* Space between icon and text */
+    width: 100%;
+    background: transparent;
+    padding-left: 15px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
 }
 
 .searchInput:focus {
     outline: none;
 }
 
-/* RIGHT */
+/* --- RIGHT: ICONS --- */
 .topbarRight {
-    flex: 4; /* Takes 4 parts */
+    flex: 4;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    color: white;
+    justify-content: flex-end;
+    gap: 20px;
+    /* Space items out */
 }
 
-.topbarLink {
-    margin-right: 10px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.topbarIcons {
+.topbarLinks {
     display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .topbarIconItem {
-    margin-right: 15px;
+    font-size: 22px;
+    color: #555;
     cursor: pointer;
-    position: relative;
-}
-
-.topbarIconBadge {
-    width: 15px;
-    height: 15px;
-    background-color: red;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    color: white;
-    position: absolute;
-    top: -5px;
-    right: -5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    transition: all 0.2s ease;
 }
 
-.topbarImg {
-    width: 32px;
-    height: 32px;
+.topbarIconItem:hover {
+    background-color: #ffeef5;
+    /* Very pale pink hover */
+    color: #dd2476;
+    /* Pink Icon */
+    transform: translateY(-2px);
+}
+
+.logoutIcon:hover {
+    background-color: #ffeaea;
+    color: red;
+}
+
+/* AVATAR: Gradient Circle with Initials */
+.userAvatar {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    object-fit: cover;
+    background: linear-gradient(to right, #ff512f, #dd2476);
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(221, 36, 118, 0.3);
 }

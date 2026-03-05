@@ -1,92 +1,257 @@
+/* GOOGLE FONTS IMPORT - Added 'Dancing Script' for cursive */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;700&family=Lora:ital,wght@1,600&display=swap');
+
+
+
+/* ... rest of your CSS below ... */
+:root {
+    --primary: #6a11cb;
+    --secondary: #2575fc;
+    /* Bright Blue */
+    --glass: rgba(255, 255, 255, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-dark: #333;
+}
+
 .login {
+    /* Peach to Warm Orange Gradient */
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    /* ... keep other properties ... */
     width: 100vw;
     height: 100vh;
-    background-color: #f0f2f5; /* Light gray background like FB */
     display: flex;
     align-items: center;
     justify-content: center;
+    position: fixed;
+    /* Fixes position so no white borders appear */
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* --- AMBIENT BACKGROUND SHAPES --- */
+.loginShape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+}
+
+.circleOne {
+    background: #fda085;
+    /* Soft Orange */
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    left: -50px;
+}
+
+.circleTwo {
+    background: #f6d365;
+    /* Soft Yellow */
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    right: -50px;
 }
 
 .loginWrapper {
-    width: 70%;
-    height: 70%;
+    width: 75%;
+    height: 75%;
     display: flex;
+    z-index: 1;
 }
 
-/* LEFT SIDE */
-.loginLeft, .loginRight {
-    flex: 1; /* Both sides take equal width */
+/* --- LEFT SIDE (Branding) --- */
+.loginLeft {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    color: white;
+    padding-right: 50px;
 }
 
 .loginLogo {
-    font-size: 50px;
-    font-weight: 800;
-    color: #1775ee; /* Facebook Blue */
+    font-family: 'Dancing Script', cursive;
+    /* <-- Cursive Font */
+    font-size: 80px;
+    /* Increased size for impact */
+    font-weight: 700;
     margin-bottom: 10px;
+    background: linear-gradient(to right, #fff, #dcdcdc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .loginDesc {
-    font-size: 24px;
+    font-family: 'Dancing Script', cursive;
+    /* <-- Cursive Font */
+    font-size: 32px;
+    /* Increased size so it's readable */
+    font-weight: 600;
+    /* Made slightly bolder */
+    line-height: 1.4;
+    opacity: 0.95;
 }
 
-/* RIGHT SIDE (The Card) */
-.loginBox {
-    height: 300px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
+/* --- RIGHT SIDE (The Glass Card) --- */
+.loginRight {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    box-shadow: 0px 0px 16px -8px rgba(0,0,0,0.68); /* Soft shadow */
+    justify-content: center;
+    align-items: center;
+}
+
+.loginBox {
+    width: 380px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    /* border: 1px solid var(--glass-border);  <-- REMOVED BORDER */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+}
+
+.loginTitle {
+    color: white;
+    margin-bottom: 25px;
+    font-family: 'Dancing Script', cursive;
+    /* <-- CHANGED TO CURSIVE */
+    font-size: 36px;
+    /* Increased size slightly for the script font */
+    font-weight: 700;
+    /* Bold */
+    text-align: center;
+}
+
+.inputGroup {
+    margin-bottom: 20px;
 }
 
 .loginInput {
+    width: 100%;
+    box-sizing: border-box;
     height: 50px;
-    border-radius: 10px;
-    border: 1px solid gray;
-    font-size: 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 16px;
     padding-left: 20px;
+    transition: all 0.3s ease;
+}
+
+.loginInput::placeholder {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .loginInput:focus {
-    outline: none; /* Removes the ugly default black outline */
-    border: 1px solid #1775ee;
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
 }
 
 .loginButton {
+    /* ... keep height, radius, font-family, etc. ... */
     height: 50px;
-    border-radius: 10px;
+    width: 100%;
+    /* Ensure width is set for login button */
+    border-radius: 12px;
     border: none;
-    background-color: #1775ee;
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+    font-weight: 700;
     color: white;
-    font-size: 20px;
-    font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease;
+
+    /* --- THE FIX: Deep Pink/Purple Gradient --- */
+    background: linear-gradient(to right, #e9ac32, #dd2476);
+    box-shadow: 0 4px 15px rgba(221, 36, 118, 0.4);
+    /* Matching pink glow */
 }
 
-.loginButton:disabled{
-    cursor: not-allowed; /* Shows a 'stop' cursor if loading */
+.loginButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 44, 128, 0.6)
+}
+
+.loginButton:disabled {
+    cursor: wait;
+    opacity: 0.7;
 }
 
 .loginForgot {
     text-align: center;
-    color: #1775ee;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
     cursor: pointer;
+    margin-bottom: 20px;
 }
 
+.loginForgot:hover {
+    text-decoration: underline;
+}
+
+.loginHr {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 10px 0 20px 0;
+}
+
+/* 2. THE REGISTER BUTTON (Purple Gradient Glow - Matching Log In) */
 .loginRegisterButton {
-    width: 60%;
-    align-self: center;
+    /* ... keep height, radius, font-family, etc. ... */
     height: 50px;
-    border-radius: 10px;
+    width: 100%;
+    /* Ensure width is set for login button */
+    border-radius: 12px;
     border: none;
-    background-color: #42b72a; /* Green color for register */
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+    font-weight: 700;
     color: white;
-    font-size: 20px;
-    font-weight: 500;
     cursor: pointer;
+    transition: all 0.3s ease;
+
+    /* --- THE FIX: Deep Pink/Purple Gradient --- */
+    background: linear-gradient(to right, #e9ac32, #dd2476);
+    box-shadow: 0 4px 15px rgba(221, 36, 118, 0.4);
+    /* Matching pink glow */
+}
+
+.loginRegisterButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(221, 36, 118, 0.6)
+}
+
+/* RESPONSIVE FOR MOBILE */
+@media screen and (max-width: 768px) {
+    .loginWrapper {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .loginLeft {
+        padding-right: 0;
+        text-align: center;
+        margin-bottom: 30px;
+        flex: 0;
+    }
+
+    .loginLogo {
+        font-size: 45px;
+    }
+
+    .loginDesc {
+        font-size: 18px;
+    }
+
+    .loginBox {
+        width: 100%;
+        padding: 25px;
+    }
 }

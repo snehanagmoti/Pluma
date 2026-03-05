@@ -15,7 +15,7 @@ import Settings from './pages/settings/Settings';
 import Bookmarks from "./pages/bookmarks/Bookmarks";
 import Groups from "./pages/groups/Groups";   // If you have a Groups page
 
-import ProtectedRoute from './components/ProtectedRoute'; 
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   // Helper to check if user is logged in (for public route redirection)
@@ -31,13 +31,13 @@ function App() {
 
         {/* PROTECTED ROUTES (Middleware) */}
         <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile/:username" element={<Profile />} />
-            <Route path="/write" element={<Write />} />
-            <Route path="/book/:bookId" element={<Single />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/bookmarks" element={<Bookmarks />} />
-            <Route path="/groups" element={<Groups />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/profile/:username" element={<Profile />} />
+          <Route path="/write" element={<Write />} />
+          <Route path="/book/:bookId" element={<Single />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/bookmarks" element={<Bookmarks />} />
+          <Route path="/groups" element={<Groups />} />
         </Route>
 
         {/* Catch-all */}

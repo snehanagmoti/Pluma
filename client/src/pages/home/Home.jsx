@@ -13,14 +13,14 @@ export default function Home() {
     <>
       {/* 2. We pass 'setQuery' to Topbar so it can CHANGE the text */}
       <Topbar setQuery={setQuery} />
-      
+
       <div className="homeContainer">
         <Sidebar />
-        
+
         {/* 3. We pass 'query' to Feed so it knows WHAT to search for */}
         <Feed query={query} />
-        
-        <Rightbar />
+
+        {/* <Rightbar /> */}
       </div>
     </>
   );

@@ -1,24 +1,41 @@
 .sidebar {
-    flex: 3;
-    height: calc(100vh - 50px); /* Full height minus the topbar (50px) */
-    overflow-y: scroll; /* Scroll if content is too long */
+    /* 1. REDUCED WIDTH */
+    flex: 1.5;
+    /* Reduced from 2.5 to make it slimmer */
+
+    height: calc(100vh - 70px);
+    /* Height minus Topbar */
     position: sticky;
-    top: 50px;
-    background-color: #f0f2f5; /* Match background */
+    top: 70px;
+    /* Matches Topbar Height */
+
+    /* 2. GRADIENT + GLASS EFFECT (Buttery Yellow Theme) */
+    /* Starts with Topbar color and fades to a softer cream/transparent */
+    background: linear-gradient(to bottom,
+            rgba(255, 250, 227, 0.95) 0%,
+            rgba(255, 255, 250, 0.6) 100%);
+    backdrop-filter: blur(12px);
+    /* The Glass Blur */
+
+    overflow-y: auto;
+    padding-top: 20px;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.02);
+    /* Very soft shadow on the right */
 }
 
-/* Hide the ugly scrollbar but keep scrolling functionality */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 5px;
 }
+
 ::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
+    background-color: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-    background-color: #888;
-}
-::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
+    background-color: rgba(221, 36, 118, 0.2);
+    /* Subtle Pink tint for scrollbar */
+    border-radius: 10px;
 }
 
 .sidebarWrapper {
@@ -31,41 +48,69 @@
     list-style: none;
 }
 
+/* REMOVE UNDERLINES FROM LINKS */
+.link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* --- PILL BUTTON STYLING --- */
 .sidebarListItem {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+    padding: 12px 15px;
+    border-radius: 15px;
+    /* More rounded */
+    color: #555;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* HOVER EFFECT */
+.sidebarListItem:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+    /* Semi-transparent white */
+    color: #dd2476;
+    /* Pink Text */
+    box-shadow: 0 4px 15px rgba(221, 36, 118, 0.15);
+    /* Soft pink glow */
+    transform: translateX(5px);
+}
+
+/* ACTIVE STATE */
+.active {
+    background-color: white;
+    /* Solid white for active tab */
+    color: #dd2476;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(221, 36, 118, 0.2);
 }
 
 .sidebarIcon {
     margin-right: 15px;
+    font-size: 22px;
 }
 
 .sidebarListItemText {
-    font-size: 15px; /* Added font-size here */
-    font-weight: 500; /* Added font-weight here */
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
 }
 
 .sidebarHr {
     margin: 20px 0;
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1), transparent);
 }
 
-.sidebarFriendList {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.sidebarFriend {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.sidebarFriendImg {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
+/* MOBILE RESPONSIVENESS */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
 }
