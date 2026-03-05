@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String   @id @default(uuid())
+  username          String   @unique
+  email             String   @unique
+  password          String
+  profilePicture    String?  @default("")
+  coverPicture      String?  @default("")
+  isPrivate         Boolean  @default(false)
+  isAdmin           Boolean  @default(false)
+  desc              String?  @db.VarChar(50)
+  city              String?  @db.VarChar(50)
+  from              String?  @db.VarChar(50)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  authoredBooks     Book[]   @relation("AuthoredBooks")
+  library           Book[]   @relation("UserLibrary")
+  recommendedBooks  Book[]   @relation("RecommendedBooks")
+  likedBooks        Book[]   @relation("BookLikes")
+
+  followers         User[]   @relation("UserFollows")
+  following         User[]   @relation("UserFollows")
+}
+
+model Book {
+  id            String   @id @default(uuid())
+  userId        String
+  authorName    String
+  title         String
+  desc          String?  @db.Text
+  genres        String[]
+  cover         String?  @default("https://via.placeholder.com/150")
+  privacy       String   @default("private")
+  rating        Float?   @default(0)
+  year          Int?
+  isbn          String?
+  pages         Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  author        User     @relation("AuthoredBooks", fields: [userId], references: [id], onDelete: Cascade)
+  chapters      Chapter[]
+
+  usersLibrary  User[]   @relation("UserLibrary")
+  recommendedTo User[]   @relation("RecommendedBooks")
+  likedBy       User[]   @relation("BookLikes")
+}
+
+model Chapter {
+  id        String   @id @default(uuid())
+  bookId    String
+  title     String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+}
