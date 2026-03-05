@@ -1,3 +1,5 @@
 .ipynb_checkpoints/
 Untitled.ipynb
 books.csv
+docker-compose.yml
+.env
