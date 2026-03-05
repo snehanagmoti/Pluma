@@ -10,7 +10,9 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "src/routes/users.js",
+    "src/routes/auth.js"
   ],
   "exclude": [
     "node_modules"
