@@ -8,11 +8,10 @@ export default function Feed({ query }) {
   const [library, setLibrary] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
-  const [searchType, setSearchType] = useState("book"); // 'book' or 'author'
+  const [searchType, setSearchType] = useState("book");
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // 1. Initial Load
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -24,13 +23,13 @@ export default function Feed({ query }) {
 
         if (user) {
           const libRes = await axios.get(
-            `http://localhost:5000/api/users/${user._id}/library`,
+            `http://localhost:5000/api/users/${user.id}/library`,
             authHeader
           );
           setLibrary(libRes.data);
 
           const recRes = await axios.get(
-            `http://localhost:5000/api/users/${user._id}/recommendations`,
+            `http://localhost:5000/api/users/${user.id}/recommendations`,
             authHeader
           );
           setRecommendations(recRes.data);
@@ -40,9 +39,8 @@ export default function Feed({ query }) {
       }
     };
     fetchBooks();
-  }, [user?._id]);
+  }, [user?.id]); // Updated dependency here too!
 
-  // 2. Search Logic
   useEffect(() => {
     const fetchSearch = async () => {
       if (query.length === 0) {
@@ -69,10 +67,8 @@ export default function Feed({ query }) {
     <div className="feed">
       <div className="feedWrapper">
 
-        {/* --- SEARCH MODE --- */}
         {query ? (
           <>
-            {/* Glass Filter Panel */}
             <div className="searchFilters">
               <span className="filterLabel">Filter results by:</span>
 
@@ -101,7 +97,7 @@ export default function Feed({ query }) {
               <h2 className="feedTitle">Search Results for "{query}"</h2>
               <div className="feedCarousel wrapCarousel">
                 {searchResults.length > 0 ? (
-                  searchResults.map((book) => <BookCard key={book._id} book={book} />)
+                  searchResults.map((book) => <BookCard key={book.id} book={book} />)
                 ) : (
                   <span className="noResults">No results found.</span>
                 )}
@@ -110,7 +106,6 @@ export default function Feed({ query }) {
           </>
         ) : (
 
-          /* --- NORMAL FEED MODE --- */
           <>
             <div className="feedSection">
               <h2 className="feedTitle">
@@ -118,8 +113,8 @@ export default function Feed({ query }) {
               </h2>
               <div className="feedCarousel">
                 {recommendations.length > 0
-                  ? recommendations.map((book) => <BookCard key={book._id} book={book} />)
-                  : books.map((book) => <BookCard key={book._id} book={book} />)
+                  ? recommendations.map((book) => <BookCard key={book.id} book={book} />)
+                  : books.map((book) => <BookCard key={book.id} book={book} />)
                 }
               </div>
             </div>
@@ -128,7 +123,7 @@ export default function Feed({ query }) {
               <h2 className="feedTitle">Your Library</h2>
               <div className="feedCarousel">
                 {user && library.length > 0 ? (
-                  library.map((book) => <BookCard key={book._id} book={book} />)
+                  library.map((book) => <BookCard key={book.id} book={book} />)
                 ) : (
                   <span className="emptyLibrary">
                     {user ? "No books saved yet." : "Login to see your library."}

@@ -1,49 +1,44 @@
 import React, { useRef, useState } from "react";
-// We reuse the Login CSS so the theme (Golden Hour + Glass) matches perfectly
 import "../login/Login.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-  const username = useRef();
-  const email = useRef();
-  const password = useRef();
-  const passwordAgain = useRef();
-  const navigate = useNavigate();
-  const [isFetching, setIsFetching] = useState(false);
+  const usernameInputRef = useRef();
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+  const passwordConfirmationInputRef = useRef();
+  const navigationController = useNavigate();
+  const [isNetworkRequestPending, setIsNetworkRequestPending] = useState(false);
 
-  const handleClick = async (e) => {
-    e.preventDefault();
+  const handleRegistrationSubmission = async (event) => {
+    event.preventDefault();
 
-    // 1. Validation: Check if passwords match
-    if (passwordAgain.current.value !== password.current.value) {
-      passwordAgain.current.setCustomValidity("Passwords don't match!");
+    if (passwordConfirmationInputRef.current.value !== passwordInputRef.current.value) {
+      passwordConfirmationInputRef.current.setCustomValidity("Passwords don't match!");
     } else {
-      setIsFetching(true);
-      const user = {
-        username: username.current.value,
-        email: email.current.value,
-        password: password.current.value,
+      setIsNetworkRequestPending(true);
+      const registrationPayload = {
+        username: usernameInputRef.current.value,
+        email: emailInputRef.current.value,
+        password: passwordInputRef.current.value,
       };
 
       try {
-        // 2. Send Register Request to Backend
-        await axios.post("http://localhost:5000/api/auth/register", user);
+        await axios.post("http://localhost:5000/api/auth/register", registrationPayload);
 
-        // 3. If successful, redirect to Login page
         alert("Account created successfully!");
-        navigate("/login");
-      } catch (err) {
-        console.log(err);
+        navigationController("/login");
+      } catch (networkRegistrationError) {
+        console.log(networkRegistrationError);
         alert("Registration failed! Email or Username might be taken.");
-        setIsFetching(false);
+        setIsNetworkRequestPending(false);
       }
     }
   };
 
   return (
     <div className="login">
-      {/* Background Shapes for consistency */}
       <div className="loginShape circleOne"></div>
       <div className="loginShape circleTwo"></div>
 
@@ -57,14 +52,14 @@ export default function Register() {
         </div>
 
         <div className="loginRight">
-          <form className="loginBox" onSubmit={handleClick} style={{ height: "auto" }}> {/* Auto height for extra inputs */}
+          <form className="loginBox" onSubmit={handleRegistrationSubmission} style={{ height: "auto" }}>
             <h2 className="loginTitle">Create Account</h2>
 
             <div className="inputGroup">
               <input
                 placeholder="Username"
                 required
-                ref={username}
+                ref={usernameInputRef}
                 className="loginInput"
               />
             </div>
@@ -73,7 +68,7 @@ export default function Register() {
               <input
                 placeholder="Email"
                 required
-                ref={email}
+                ref={emailInputRef}
                 className="loginInput"
                 type="email"
               />
@@ -83,7 +78,7 @@ export default function Register() {
               <input
                 placeholder="Password"
                 required
-                ref={password}
+                ref={passwordInputRef}
                 className="loginInput"
                 type="password"
                 minLength="6"
@@ -94,14 +89,14 @@ export default function Register() {
               <input
                 placeholder="Password Again"
                 required
-                ref={passwordAgain}
+                ref={passwordConfirmationInputRef}
                 className="loginInput"
                 type="password"
               />
             </div>
 
-            <button className="loginButton" type="submit" disabled={isFetching}>
-              {isFetching ? "Creating Account..." : "Sign Up"}
+            <button className="loginButton" type="submit" disabled={isNetworkRequestPending}>
+              {isNetworkRequestPending ? "Creating Account..." : "Sign Up"}
             </button>
 
             <hr className="loginHr" />
@@ -109,7 +104,7 @@ export default function Register() {
             <button
               className="loginRegisterButton"
               type="button"
-              onClick={() => navigate("/login")}
+              onClick={() => navigationController("/login")}
             >
               Log into Account
             </button>

@@ -5,76 +5,68 @@ import Topbar from "../../components/topbar/Topbar";
 import { useNavigate } from "react-router-dom";
 
 export default function Write() {
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [genres, setGenres] = useState(""); // NEW STATE
-  const [chapterContent, setChapterContent] = useState("");
-  const [privacy, setPrivacy] = useState("private");
-  const navigate = useNavigate();
+  const [bookTitle, setBookTitle] = useState("");
+  const [bookDescription, setBookDescription] = useState("");
+  const [bookGenres, setBookGenres] = useState("");
+  const [initialChapterContent, setInitialChapterContent] = useState("");
+  const [publicationPrivacy, setPublicationPrivacy] = useState("private");
+  const navigationController = useNavigate();
 
-  // Get the logged-in user info from local storage
-  const user = JSON.parse(localStorage.getItem("user"));
+  const activeUserSession = JSON.parse(localStorage.getItem("user"));
+  const authenticationToken = localStorage.getItem("token");
 
-  // 1. Get the token
-  const token = localStorage.getItem("token");
+  const handleBookSubmission = async (event) => {
+    event.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Check for both user object and token
-    if (!user || !token) {
+    if (!activeUserSession || !authenticationToken) {
       alert("You must be logged in to publish a book!");
-      navigate("/login");
+      navigationController("/login");
       return;
     }
 
-    // 1. Process Genres: Split by comma, trim spaces, remove empty strings
-    const genreArray = genres
+    const formattedGenreArray = bookGenres
       .split(",")
-      .map((g) => g.trim().toLowerCase()) // Normalize to lowercase
-      .filter((g) => g !== "");
+      .map((genre) => genre.trim().toLowerCase())
+      .filter((genre) => genre !== "");
 
-    if (genreArray.length === 0) {
+    if (formattedGenreArray.length === 0) {
       alert("Please add at least one genre (e.g. Fantasy)");
       return;
     }
 
-    // Construct the Book Object matching your Backend Model
-    const newBook = {
-      userId: user._id,
-      authorName: user.username,
-      title: title,
-      desc: desc,
-      genres: genreArray, // SENDING ARRAY TO BACKEND
-      privacy: privacy,
-      cover: "https://via.placeholder.com/800x400", // Placeholder for now
+    const newBookPayload = {
+      userId: activeUserSession.id,
+      authorName: activeUserSession.username,
+      title: bookTitle,
+      desc: bookDescription,
+      genres: formattedGenreArray,
+      privacy: publicationPrivacy,
+      cover: "https://via.placeholder.com/800x400",
       chapters: [
         {
           title: "Chapter 1",
-          content: chapterContent,
+          content: initialChapterContent,
         },
       ],
     };
 
     try {
-      // 2. Add headers as the THIRD argument to axios.post
-      await axios.post("http://localhost:5000/api/books", newBook, {
+      await axios.post("http://localhost:5000/api/books", newBookPayload, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authenticationToken}`,
         },
       });
 
       alert("Book Published Successfully!");
-      navigate("/"); // Go back home
-    } catch (err) {
-      console.log(err);
+      navigationController("/");
+    } catch (networkSubmissionError) {
+      console.log(networkSubmissionError);
       alert("Error publishing book");
     }
   };
 
   return (
     <>
-      {/* We pass empty setQuery because Topbar expects it, but we won't search here */}
       <Topbar setQuery={() => { }} />
 
       <div className="write">
@@ -84,25 +76,24 @@ export default function Write() {
             src="https://via.placeholder.com/800x400"
             alt=""
           />
-          <form className="writeForm" onSubmit={handleSubmit}>
+          <form className="writeForm" onSubmit={handleBookSubmission}>
             <div className="writeFormGroup">
               <input
                 type="text"
                 placeholder="Title of your Story"
                 className="writeInput"
                 autoFocus={true}
-                onChange={e => setTitle(e.target.value)}
+                onChange={event => setBookTitle(event.target.value)}
                 required
               />
             </div>
-            {/* NEW GENRE INPUT */}
             <div className="writeFormGroup">
               <input
                 type="text"
                 placeholder="Genres (e.g. Horror, Mystery, Sci-Fi)"
                 className="writeInput"
                 style={{ fontSize: "16px", fontStyle: "italic" }}
-                onChange={e => setGenres(e.target.value)}
+                onChange={event => setBookGenres(event.target.value)}
                 required
               />
             </div>
@@ -112,15 +103,15 @@ export default function Write() {
                 placeholder="Short Description..."
                 className="writeInput"
                 style={{ fontSize: "18px" }}
-                onChange={e => setDesc(e.target.value)}
+                onChange={event => setBookDescription(event.target.value)}
               />
             </div>
 
             <div className="writePrivacy">
               <label>Privacy: </label>
               <select
-                value={privacy}
-                onChange={(e) => setPrivacy(e.target.value)}
+                value={publicationPrivacy}
+                onChange={(event) => setPublicationPrivacy(event.target.value)}
                 style={{ marginLeft: "10px", padding: "5px" }}
               >
                 <option value="private">Private (Draft)</option>
@@ -133,7 +124,7 @@ export default function Write() {
                 placeholder="Start writing your first chapter..."
                 type="text"
                 className="writeInput writeText"
-                onChange={e => setChapterContent(e.target.value)}
+                onChange={event => setInitialChapterContent(event.target.value)}
                 required
               ></textarea>
             </div>

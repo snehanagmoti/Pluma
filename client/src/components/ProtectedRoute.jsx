@@ -2,17 +2,12 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = () => {
-  // Check if user is logged in. 
-  // This could be from Context, Redux, or simple localStorage.
-  // Example using localStorage:
-  const token = localStorage.getItem('token'); 
+  const authenticationToken = localStorage.getItem('token');
 
-  // If no token exists, redirect to login
-  if (!token) {
+  if (!authenticationToken) {
     return <Navigate to="/login" replace />;
   }
 
-  // If token exists, render the child routes (The actual page)
   return <Outlet />;
 };
 

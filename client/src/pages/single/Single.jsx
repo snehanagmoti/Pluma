@@ -7,77 +7,64 @@ import Topbar from "../../components/topbar/Topbar";
 export default function Single() {
   const { bookId } = useParams();
   const [book, setBook] = useState(null);
-  const [isAdded, setIsAdded] = useState(false); // <--- 1. New State for button
+  const [isAddedToLibrary, setIsAddedToLibrary] = useState(false);
   const navigate = useNavigate();
 
-  // Safe user parsing (handle case where user is null)
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = localStorage.getItem("token");
+  const activeUserSession = JSON.parse(localStorage.getItem("user"));
+  const authenticationToken = localStorage.getItem("token");
 
-  // 2. CHECK IF BOOK IS IN LIBRARY ON LOAD
   useEffect(() => {
     const checkLibraryStatus = async () => {
-      if (user && token) {
+      if (activeUserSession && authenticationToken) {
         try {
-          // We fetch the user's current library
-          const res = await axios.get(
-            `http://localhost:5000/api/users/${user._id}/library`,
-            { headers: { Authorization: `Bearer ${token}` } }
+          const libraryStatusResponse = await axios.get(
+            `http://localhost:5000/api/users/${activeUserSession.id}/library`,
+            { headers: { Authorization: `Bearer ${authenticationToken}` } }
           );
-          // The backend returns an array of book objects. 
-          // We check if THIS bookId exists in that array.
-          const found = res.data.some((b) => b._id === bookId);
-          setIsAdded(found);
-        } catch (err) {
-          console.log("Error checking library status:", err);
+
+          const isBookPresent = libraryStatusResponse.data.some((targetBook) => targetBook.id === bookId);
+          setIsAddedToLibrary(isBookPresent);
+        } catch (networkError) {
+          console.log(networkError);
         }
       }
     };
     checkLibraryStatus();
-  }, [bookId, token, user?._id]); // Run this when page loads
+  }, [bookId, authenticationToken, activeUserSession?.id]);
 
-
-  // 3. FETCH BOOK DETAILS
   useEffect(() => {
-    const fetchBook = async () => {
+    const fetchBookDetails = async () => {
       try {
-        const res = await axios.get(
+        const bookDetailsResponse = await axios.get(
           `http://localhost:5000/api/books/find/${bookId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${authenticationToken}` } }
         );
-        setBook(res.data);
-      } catch (err) {
-        console.log("Error fetching book:", err);
+        setBook(bookDetailsResponse.data);
+      } catch (networkError) {
+        console.log(networkError);
       }
     };
-    fetchBook();
-  }, [bookId, token]);
+    fetchBookDetails();
+  }, [bookId, authenticationToken]);
 
-
-  const handleLibrary = async () => {
-    if (!user || !token) {
+  const handleLibraryToggle = async () => {
+    if (!activeUserSession || !authenticationToken) {
       alert("Please login to save books!");
       navigate("/login");
       return;
     }
+
     try {
-      // 4. INSTANT UI TOGGLE (Optimistic UI)
-      // We flip the button immediately so it feels fast
-      setIsAdded(!isAdded);
+      setIsAddedToLibrary(!isAddedToLibrary);
 
-      // Send request to backend
-      const res = await axios.put(
-        `http://localhost:5000/api/users/${user._id}/library`,
-        { userId: user._id, bookId: book._id },
-        { headers: { Authorization: `Bearer ${token}` } }
+      await axios.put(
+        `http://localhost:5000/api/users/${activeUserSession.id}/library`,
+        { userId: activeUserSession.id, bookId: book.id },
+        { headers: { Authorization: `Bearer ${authenticationToken}` } }
       );
-
-      // Optional: Show success message briefly
-      // alert(res.data); 
-    } catch (err) {
-      // If error, flip it back
-      setIsAdded(!isAdded);
-      console.log(err);
+    } catch (networkError) {
+      setIsAddedToLibrary(!isAddedToLibrary);
+      console.log(networkError);
     }
   };
 
@@ -87,7 +74,6 @@ export default function Single() {
 
       <div className="single">
         <div className="singleWrapper">
-
           {!book ? (
             <div style={{ marginTop: "20px" }}>Loading book...</div>
           ) : (
@@ -107,13 +93,12 @@ export default function Single() {
                   <div className="singleActions">
                     <button className="singleBtn btnRead">Start Reading</button>
 
-                    {/* 5. CONDITIONAL RENDERING OF BUTTON */}
                     <button
-                      className={`singleBtn ${isAdded ? "btnRemove" : "btnLib"}`}
-                      onClick={handleLibrary}
-                      style={{ backgroundColor: isAdded ? "tomato" : "teal" }} // Optional visual cue
+                      className={`singleBtn ${isAddedToLibrary ? "btnRemove" : "btnLib"}`}
+                      onClick={handleLibraryToggle}
+                      style={{ backgroundColor: isAddedToLibrary ? "tomato" : "teal" }}
                     >
-                      {isAdded ? "- Remove from Library" : "+ Add to Library"}
+                      {isAddedToLibrary ? "- Remove from Library" : "+ Add to Library"}
                     </button>
                   </div>
                 </div>
@@ -132,7 +117,6 @@ export default function Single() {
               </div>
             </>
           )}
-
         </div>
       </div>
     </>

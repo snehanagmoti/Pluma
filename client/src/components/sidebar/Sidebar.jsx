@@ -10,55 +10,41 @@ import {
 import { Link, useLocation } from "react-router-dom";
 
 export default function Sidebar() {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const location = useLocation(); // To highlight the active page
+  const activeUserSession = JSON.parse(localStorage.getItem("user"));
+  const currentNavigationLocation = useLocation();
 
-  // Helper to check if link is active
-  const isActive = (path) => location.pathname === path;
+  const isCurrentPathActive = (targetPath) => currentNavigationLocation.pathname === targetPath;
 
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
         <ul className="sidebarList">
 
-          {/* 1. Feed / Home (Optional, but good to have) */}
           <Link to="/" className="link">
-            <li className={`sidebarListItem ${isActive("/") ? "active" : ""}`}>
+            <li className={`sidebarListItem ${isCurrentPathActive("/") ? "active" : ""}`}>
               <MdRssFeed className="sidebarIcon" />
               <span className="sidebarListItemText">Feed</span>
             </li>
           </Link>
 
-          {/* 2. Profile Link */}
-          <Link to={`/profile/${user?.username}`} className="link">
-            <li className={`sidebarListItem ${isActive(`/profile/${user?.username}`) ? "active" : ""}`}>
+          <Link to={`/profile/${activeUserSession?.username}`} className="link">
+            <li className={`sidebarListItem ${isCurrentPathActive(`/profile/${activeUserSession?.username}`) ? "active" : ""}`}>
               <MdPerson className="sidebarIcon" />
               <span className="sidebarListItemText">My Profile</span>
             </li>
           </Link>
 
-          {/* 3. Bookmarks */}
           <Link to="/bookmarks" className="link">
-            <li className={`sidebarListItem ${isActive("/bookmarks") ? "active" : ""}`}>
+            <li className={`sidebarListItem ${isCurrentPathActive("/bookmarks") ? "active" : ""}`}>
               <MdBookmark className="sidebarIcon" />
               <span className="sidebarListItemText">Bookmarks</span>
             </li>
           </Link>
 
-          {/* 4. Groups (Uncomment if needed) */}
-          {/* <Link to="/groups" className="link">
-            <li className="sidebarListItem">
-              <MdGroup className="sidebarIcon" />
-              <span className="sidebarListItemText">Communities</span>
-            </li>
-          </Link> 
-          */}
-
           <hr className="sidebarHr" />
 
-          {/* 5. Settings */}
           <Link to="/settings" className="link">
-            <li className={`sidebarListItem ${isActive("/settings") ? "active" : ""}`}>
+            <li className={`sidebarListItem ${isCurrentPathActive("/settings") ? "active" : ""}`}>
               <MdSettings className="sidebarIcon" />
               <span className="sidebarListItemText">Settings</span>
             </li>

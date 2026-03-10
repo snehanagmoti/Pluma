@@ -1,35 +1,27 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// --- IMPORT COMPONENT NAMES CORRECTLY ---
-// If your files are in specific folders (e.g. pages/home/Home.jsx), 
-// adjust the path strings below to match YOUR folder structure.
-
-import Home from './pages/home/Home';       // Was HomePage
-import Login from './pages/login/Login';     // Was LoginPage
-import Register from './pages/register/Register'; // Was RegisterPage
-import Profile from './pages/profile/Profile';    // Was ProfilePage
-import Write from './pages/write/Write';      // You missed importing this
-import Single from './pages/single/Single';   // You missed importing this
+import Home from './pages/home/Home';
+import Login from './pages/login/Login';
+import Register from './pages/register/Register';
+import Profile from './pages/profile/Profile';
+import Write from './pages/write/Write';
+import Single from './pages/single/Single';
 import Settings from './pages/settings/Settings';
 import Bookmarks from "./pages/bookmarks/Bookmarks";
-import Groups from "./pages/groups/Groups";   // If you have a Groups page
+import Groups from "./pages/groups/Groups";
 
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-  // Helper to check if user is logged in (for public route redirection)
-  const user = localStorage.getItem("user");
+  const activeUserSession = localStorage.getItem("user");
 
   return (
     <BrowserRouter>
       <Routes>
-        {/* PUBLIC ROUTES */}
-        {/* If user is already logged in, send them to Home instead of Login */}
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+        <Route path="/login" element={activeUserSession ? <Navigate to="/" /> : <Login />} />
+        <Route path="/register" element={activeUserSession ? <Navigate to="/" /> : <Register />} />
 
-        {/* PROTECTED ROUTES (Middleware) */}
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
           <Route path="/profile/:username" element={<Profile />} />
@@ -40,7 +32,6 @@ function App() {
           <Route path="/groups" element={<Groups />} />
         </Route>
 
-        {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>

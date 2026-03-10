@@ -1,11 +1,10 @@
 import React from "react";
 import "./BookCard.css";
-import { Link } from "react-router-dom"; // Import Link
+import { Link } from "react-router-dom";
 
 export default function BookCard({ book }) {
   return (
-    // Wrap the whole card in a Link
-    <Link to={`/book/${book._id}`} style={{ textDecoration: "none" }}>
+    <Link to={`/book/${book.id}`} style={{ textDecoration: "none" }}>
       <div className="bookCard">
         <img src={book.cover} alt="" className="bookCover" />
         <div className="bookInfo">

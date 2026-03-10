@@ -3,7 +3,7 @@ import axios from "axios";
 import { prismaClient } from "../config/db";
 
 export const createBook = async (req: Request, res: Response): Promise<any> => {
-  const { genres, ...otherBookData } = req.body;
+  const { genres, chapters, ...otherBookData } = req.body;
 
   if (!genres || genres.length === 0) {
     return res.status(400).json("At least one genre is required.");
@@ -14,6 +14,16 @@ export const createBook = async (req: Request, res: Response): Promise<any> => {
       data: {
         ...otherBookData,
         genres: genres,
+        // Relational mapping for the Chapter model
+        chapters: {
+          create: chapters.map((chapterItem: any) => ({
+            title: chapterItem.title,
+            content: chapterItem.content,
+          })),
+        },
+      },
+      include: {
+        chapters: true,
       },
     });
 
@@ -26,6 +36,7 @@ export const createBook = async (req: Request, res: Response): Promise<any> => {
 
     return res.status(200).json(createdBookRecord);
   } catch (databaseError) {
+    console.error("❌ PRISMA CREATE ERROR:", databaseError);
     return res.status(500).json(databaseError);
   }
 };
@@ -44,15 +55,16 @@ export const updateBook = async (req: Request, res: Response): Promise<any> => {
     }
 
     if (existingBookRecord.userId === requestingUserId) {
-      await prismaClient.book.update({
+      const updatedBook = await prismaClient.book.update({
         where: { id: targetBookId },
         data: req.body,
       });
-      return res.status(200).json("The book has been updated");
+      return res.status(200).json(updatedBook);
     } else {
       return res.status(403).json("You can only update your own book!");
     }
   } catch (databaseError) {
+    console.error("❌ PRISMA UPDATE ERROR:", databaseError);
     return res.status(500).json(databaseError);
   }
 };
@@ -62,6 +74,7 @@ export const getBook = async (req: Request, res: Response): Promise<any> => {
     const targetBookId = req.params.id as string;
     const retrievedBookRecord = await prismaClient.book.findUnique({
       where: { id: targetBookId },
+      include: { chapters: true }
     });
 
     if (!retrievedBookRecord) {
@@ -70,6 +83,7 @@ export const getBook = async (req: Request, res: Response): Promise<any> => {
 
     return res.status(200).json(retrievedBookRecord);
   } catch (databaseError) {
+    console.error("❌ PRISMA GET ERROR:", databaseError);
     return res.status(500).json(databaseError);
   }
 };
@@ -79,9 +93,11 @@ export const getAllBooks = async (req: Request, res: Response): Promise<any> => 
     const publicBookCollection = await prismaClient.book.findMany({
       where: { privacy: "public" },
       orderBy: { createdAt: "desc" },
+      include: { chapters: true }
     });
     return res.status(200).json(publicBookCollection);
   } catch (databaseError) {
+    console.error("❌ PRISMA GETALL ERROR:", databaseError);
     return res.status(500).json(databaseError);
   }
 };
@@ -95,10 +111,12 @@ export const getUserBooks = async (req: Request, res: Response): Promise<any> =>
         authorName: targetAuthorName,
         privacy: "public"
       },
+      include: { chapters: true }
     });
 
     return res.status(200).json(authorBookCollection);
   } catch (databaseError) {
+    console.error("❌ PRISMA GETUSERBOOKS ERROR:", databaseError);
     return res.status(500).json(databaseError);
   }
 };
@@ -120,6 +138,7 @@ export const searchBooks = async (req: Request, res: Response): Promise<any> => 
           authorName: { contains: searchQuery, mode: "insensitive" },
           privacy: "public",
         },
+        include: { chapters: true }
       });
     } else if (searchType === "genre") {
       matchingBookCollection = await prismaClient.book.findMany({
@@ -127,6 +146,7 @@ export const searchBooks = async (req: Request, res: Response): Promise<any> => 
           genres: { has: searchQuery.toLowerCase() },
           privacy: "public",
         },
+        include: { chapters: true }
       });
     } else {
       matchingBookCollection = await prismaClient.book.findMany({
@@ -134,11 +154,13 @@ export const searchBooks = async (req: Request, res: Response): Promise<any> => 
           title: { contains: searchQuery, mode: "insensitive" },
           privacy: "public",
         },
+        include: { chapters: true }
       });
     }
 
     return res.status(200).json(matchingBookCollection);
   } catch (databaseError) {
+    console.error("❌ PRISMA SEARCH ERROR:", databaseError);
     return res.status(500).json(databaseError);
   }
 };

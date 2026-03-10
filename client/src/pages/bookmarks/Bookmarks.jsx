@@ -6,42 +6,39 @@ import BookCard from "../../components/bookCard/BookCard";
 import axios from "axios";
 
 export default function Bookmarks() {
-  const [books, setBooks] = useState([]);
-  
-  // Get User and Token
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = localStorage.getItem("token");
+  const [bookmarkedCollection, setBookmarkedCollection] = useState([]);
+
+  const activeUserSession = JSON.parse(localStorage.getItem("user"));
+  const authenticationToken = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchLibrary = async () => {
+    const retrieveUserBookmarks = async () => {
       try {
-        // Fetch the user's library using the existing backend route
-        const res = await axios.get(`http://localhost:5000/api/users/${user._id}/library`, {
-          headers: { Authorization: `Bearer ${token}` }
+        const libraryRetrievalResponse = await axios.get(`http://localhost:5000/api/users/${activeUserSession.id}/library`, {
+          headers: { Authorization: `Bearer ${authenticationToken}` }
         });
-        setBooks(res.data);
-      } catch (err) {
-        console.log(err);
+        setBookmarkedCollection(libraryRetrievalResponse.data);
+      } catch (networkRetrievalError) {
+        console.log(networkRetrievalError);
       }
     };
-    fetchLibrary();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    retrieveUserBookmarks();
   }, []);
 
   return (
     <>
-      <Topbar setQuery={() => {}} />
+      <Topbar setQuery={() => { }} />
       <div className="bookmarksContainer">
         <Sidebar />
         <div className="bookmarksRight">
-            <h2 className="bookmarksTitle">My Bookmarks</h2>
-            <div className="bookmarksWrapper">
-                {books.length > 0 ? (
-                    books.map((book) => <BookCard key={book._id} book={book} />)
-                ) : (
-                    <span className="noBookmarks">You haven't saved any books yet.</span>
-                )}
-            </div>
+          <h2 className="bookmarksTitle">My Bookmarks</h2>
+          <div className="bookmarksWrapper">
+            {bookmarkedCollection.length > 0 ? (
+              bookmarkedCollection.map((book) => <BookCard key={book.id} book={book} />)
+            ) : (
+              <span className="noBookmarks">You haven't saved any books yet.</span>
+            )}
+          </div>
         </div>
       </div>
     </>

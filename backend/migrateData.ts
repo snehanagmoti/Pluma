@@ -6,78 +6,95 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const postgresPool = new Pool({ connectionString: process.env.DATABASE_URL });
-const prismaAdapter = new PrismaPg(postgresPool);
+const pgPool = new Pool({ connectionString: process.env.DATABASE_URL });
+const pgAdapter = new PrismaPg(pgPool);
+const prismaClientInstance = new PrismaClient({ adapter: pgAdapter });
+const mongoDatabaseUri = process.env.MONGO_URI as string;
 
-const prismaClient = new PrismaClient({ adapter: prismaAdapter });
-const mongoUri = process.env.MONGO_URI as string;
-
-const fallbackUserSchema = new mongoose.Schema({}, { strict: false });
-const fallbackBookSchema = new mongoose.Schema({}, { strict: false });
-
-const MongoUserModel = mongoose.model("User", fallbackUserSchema, "users");
-const MongoBookModel = mongoose.model("Book", fallbackBookSchema, "books");
+const fallbackSchema = new mongoose.Schema({}, { strict: false });
+const MongoBookModel = mongoose.model("Book", fallbackSchema, "books");
 
 async function executeDataMigration() {
     console.log("Connecting to databases...");
-    await mongoose.connect(mongoUri);
+    await mongoose.connect(mongoDatabaseUri);
 
-    console.log("Fetching and migrating Users...");
-    const mongoUsers = await MongoUserModel.find().lean();
-    const userPayloads = (mongoUsers as any[]).map((mongoUser: any) => ({
-        id: mongoUser._id.toString(),
-        username: mongoUser.username,
-        email: mongoUser.email,
-        password: mongoUser.password,
-        profilePicture: mongoUser.profilePicture || "",
-        coverPicture: mongoUser.coverPicture || "",
-        isPrivate: mongoUser.isPrivate || false,
-        isAdmin: mongoUser.isAdmin || false,
-        desc: mongoUser.desc || "",
-        city: mongoUser.city || "",
-        from: mongoUser.from || "",
-    }));
-
-    await prismaClient.user.createMany({
-        data: userPayloads,
-        skipDuplicates: true,
+    const archiveUser = await prismaClientInstance.user.upsert({
+        where: { username: "system_archive" },
+        update: {},
+        create: {
+            username: "system_archive",
+            email: "archive@system.local",
+            password: "secure_placeholder",
+            isPrivate: false,
+            isAdmin: true,
+        }
     });
 
-    const migratedUsers = await prismaClient.user.findMany({ select: { id: true } });
-    const validUserIds = new Set(migratedUsers.map((user: any) => user.id));
+    const activeUsers = await prismaClientInstance.user.findMany();
+    const validUserIds = new Set(activeUsers.map(user => user.id));
+    const usernameToIdMap = new Map(activeUsers.map(user => [user.username, user.id]));
 
-    console.log("Fetching and migrating Books...");
-    const mongoBooks = await MongoBookModel.find().lean();
-    const bookPayloads = [];
+    const mongoBooksData = await MongoBookModel.find().lean();
+    console.log(`Found ${mongoBooksData.length} books in MongoDB.`);
 
-    for (const mongoBook of mongoBooks as any[]) {
-        if (mongoBook.userId && validUserIds.has(mongoBook.userId.toString())) {
-            bookPayloads.push({
-                id: mongoBook._id.toString(),
-                userId: mongoBook.userId.toString(),
-                authorName: mongoBook.authorName,
-                title: mongoBook.title,
-                desc: mongoBook.desc || "",
-                genres: mongoBook.genres || [],
-                cover: mongoBook.cover || "https://via.placeholder.com/150",
-                privacy: mongoBook.privacy || "private",
-                rating: mongoBook.rating || 0,
-                year: mongoBook.year || null,
-                isbn: mongoBook.isbn || null,
-                pages: mongoBook.pages || null,
+    let successfullyMigratedCount = 0;
+    let skippedDuplicateCount = 0;
+
+    for (const mongoBookRecord of mongoBooksData as any[]) {
+        const rawUserIdString = mongoBookRecord.userId?.toString();
+        let targetPostgresUserId = archiveUser.id;
+
+        if (validUserIds.has(rawUserIdString)) {
+            targetPostgresUserId = rawUserIdString;
+        } else if (usernameToIdMap.has(rawUserIdString)) {
+            targetPostgresUserId = usernameToIdMap.get(rawUserIdString)!;
+        }
+
+        const formattedChaptersData = mongoBookRecord.chapters && Array.isArray(mongoBookRecord.chapters)
+            ? mongoBookRecord.chapters.map((chapterRecord: any) => ({
+                title: chapterRecord.title || "Untitled",
+                content: chapterRecord.content || ""
+              }))
+            : [];
+
+        try {
+            await prismaClientInstance.book.create({
+                data: {
+                    id: mongoBookRecord._id.toString(),
+                    userId: targetPostgresUserId,
+                    authorName: mongoBookRecord.authorName || "Unknown Author",
+                    title: mongoBookRecord.title || "Untitled Book",
+                    desc: mongoBookRecord.desc || "",
+                    genres: mongoBookRecord.genres || [],
+                    cover: mongoBookRecord.cover || "https://via.placeholder.com/150",
+                    privacy: mongoBookRecord.privacy || "public",
+                    rating: mongoBookRecord.rating ? Number(mongoBookRecord.rating) : 0,
+                    year: mongoBookRecord.year ? Number(mongoBookRecord.year) : null,
+                    isbn: mongoBookRecord.isbn ? mongoBookRecord.isbn.toString() : null,
+                    pages: mongoBookRecord.pages ? Number(mongoBookRecord.pages) : null,
+                    chapters: {
+                        create: formattedChaptersData
+                    }
+                }
             });
+            successfullyMigratedCount++;
+        } catch (databaseError: any) {
+            if (databaseError.code === 'P2002') {
+                skippedDuplicateCount++;
+                continue; 
+            } else {
+                console.error(`\n❌ STOPPING MIGRATION: Failed on book ID ${mongoBookRecord._id}`);
+                console.error(`Database Error Reason:\n`, databaseError.message);
+                break; 
+            }
         }
     }
 
-    await prismaClient.book.createMany({
-        data: bookPayloads,
-        skipDuplicates: true,
-    });
-
-    console.log("Migration Complete! Check Prisma Studio.");
-
+    console.log(`\n⏩ Skipped ${skippedDuplicateCount} books that were already in PostgreSQL.`);
+    console.log(`✅ Successfully migrated ${successfullyMigratedCount} new books this run.`);
+    
     await mongoose.disconnect();
-    await prismaClient.$disconnect();
+    await prismaClientInstance.$disconnect();
 }
 
 executeDataMigration();
