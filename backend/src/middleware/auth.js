@@ -2,11 +2,15 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = async (req, res, next) => {
   try {
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is required");
+      return res.status(503).json({ message: "Authentication is not configured" });
+    }
     // 1. Get the token from the header
     let token = req.header("Authorization");
 
     if (!token) {
-      return res.status(403).send("Access Denied: No Token Provided");
+      return res.status(401).json({ message: "Authentication required" });
     }
 
     // Remove "Bearer " prefix if it exists
@@ -15,7 +19,7 @@ const verifyToken = async (req, res, next) => {
     }
 
     // 2. Verify the token
-    const verified = jwt.verify(token, process.env.JWT_SECRET || "your_jwt_secret");
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
     
     // 3. Attach user info to the request object
     req.user = verified;
@@ -24,7 +28,7 @@ const verifyToken = async (req, res, next) => {
     next();
     
   } catch (err) {
-    res.status(401).json({ error: "Invalid Token" });
+    res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 

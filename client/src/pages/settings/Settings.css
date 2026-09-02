@@ -1,107 +1,447 @@
-.settingsContainer {
-    display: flex;
+.settingsPage {
+  min-height: calc(100vh - 64px);
+  background: var(--bg-primary);
+  padding: 36px;
 }
 
-.settingsWrapper {
-    flex: 9;
-    padding: 20px;
+.settingsContainer {
+  max-width: 700px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
 }
 
 .settingsTitle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.settingsUpdateTitle {
-    font-size: 30px;
-    margin-bottom: 20px;
-    color: lightcoral; /* or teal, depending on your theme */
+.settingsMessage {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.3s ease;
 }
 
-.settingsDeleteTitle {
-    color: red;
-    font-size: 12px;
-    cursor: pointer;
+.settingsMessage.success {
+  background: rgba(76, 175, 80, 0.1);
+  color: #2e7d32;
+  border: 1px solid rgba(76, 175, 80, 0.2);
 }
 
-.settingsForm {
-    display: flex;
+.settingsMessage.error {
+  background: rgba(244, 67, 54, 0.1);
+  color: #c62828;
+  border: 1px solid rgba(244, 67, 54, 0.2);
+}
+
+.settingsCard {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  border: 1px solid var(--border-light);
+  margin-bottom: 20px;
+}
+
+.settingsCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.settingsCardTitle svg {
+  color: var(--accent-pink);
+}
+
+.settingsCardTitle.danger svg {
+  color: var(--accent-red);
+}
+
+/* Avatar */
+.settingsAvatar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(246, 211, 101, 0.08);
+  border-radius: var(--radius-md);
+}
+
+.settingsAvatarCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.settingsAvatarImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.settingsAvatarName {
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.settingsAvatarProvider {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Fields */
+.settingsField {
+  margin-bottom: 18px;
+}
+
+.settingsField label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settingsField input,
+.settingsField textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+  background: white;
+}
+
+.settingsField input:focus,
+.settingsField textarea:focus {
+  border-color: var(--accent-pink);
+}
+
+.settingsField input.disabled {
+  background: #f9f9f9;
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.settingsField textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.settingsFieldHint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  display: block;
+}
+
+/* Save Button */
+.settingsSaveBtn {
+  width: 100%;
+  padding: 14px;
+  background: var(--button-gradient);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-glow);
+  margin-bottom: 20px;
+  font-family: var(--font-primary);
+}
+
+.settingsSaveBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(221, 36, 118, 0.35);
+}
+
+.settingsSaveBtn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Danger Zone */
+.dangerZone {
+  border-color: rgba(244, 67, 54, 0.2);
+}
+
+.dangerText {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.deleteAccountBtn {
+  padding: 10px 20px;
+  border: 1px solid var(--accent-red);
+  background: transparent;
+  color: var(--accent-red);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  font-family: var(--font-primary);
+}
+
+.deleteAccountBtn:hover {
+  background: var(--accent-red);
+  color: white;
+}
+
+/* Delete Modal */
+.deleteModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.deleteModal {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  animation: scaleIn 0.3s ease;
+}
+
+.deleteModal h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.deleteModal p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.deleteModalActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.deleteModalCancel {
+  padding: 10px 24px;
+  border: 1px solid var(--border-light);
+  background: white;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-weight: 500;
+}
+
+.deleteModalConfirm {
+  padding: 10px 24px;
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-primary);
+  transition: var(--transition-fast);
+}
+
+.deleteModalConfirm:hover {
+  opacity: 0.9;
+}
+
+/* ═══ Settings Tabs ═══ */
+.settingsTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.settingsTab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-light);
+  background: white;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-family: var(--font-primary);
+}
+
+.settingsTab:hover {
+  border-color: var(--accent-pink);
+  color: var(--accent-pink);
+}
+
+.settingsTab.active {
+  background: var(--accent-gradient);
+  color: white;
+  border-color: transparent;
+}
+
+.settingsTab.active svg {
+  color: white;
+}
+
+/* ═══ AI Settings ═══ */
+.aiSettingsCard {
+  border-color: rgba(108, 99, 255, 0.15);
+}
+
+.aiSettingsCard .settingsCardTitle svg {
+  color: #6c63ff;
+}
+
+.aiSettingsDesc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: rgba(108, 99, 255, 0.04);
+  border-radius: var(--radius-md);
+  border-left: 3px solid #6c63ff;
+}
+
+.keyStatus {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.keyStatus.active {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+/* Model Preference Rows */
+.modelPrefRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modelPrefRow:last-child {
+  border-bottom: none;
+}
+
+.modelPrefLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modelPrefLabel strong {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.modelPrefLabel span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.modelPrefSelects {
+  display: flex;
+  gap: 8px;
+}
+
+.modelPrefSelect {
+  padding: 8px 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+  outline: none;
+  cursor: pointer;
+  background: white;
+  min-width: 120px;
+}
+
+.modelPrefSelect:focus {
+  border-color: #6c63ff;
+}
+
+.settingsField select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  cursor: pointer;
+  background: white;
+}
+
+.aiSaveBtn {
+  background: linear-gradient(135deg, #6c63ff, #a855f7) !important;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3) !important;
+}
+
+.aiSaveBtn:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4) !important;
+}
+
+@media screen and (max-width: 600px) {
+  .modelPrefRow {
     flex-direction: column;
-}
-
-.settingsPP {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-}
-
-.settingsPP > img {
-    width: 70px;
-    height: 70px;
-    border-radius: 20px;
-    object-fit: cover;
-}
-
-.settingsPPIcon {
-    width: 25px;
-    height: 25px;
-    padding: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    border-radius: 50%;
-    margin-left: 10px;
-    color: white;
-    background-color: lightcoral;
-    cursor: pointer;
-}
-
-.settingsForm > label {
-    font-size: 20px;
-    margin-top: 20px;
-}
-
-.settingsForm > input {
-    color: gray;
-    margin-top: 10px;
-    height: 30px;
-    border: none;
-    border-bottom: 1px solid lightgray;
-}
-
-.settingsForm > input:focus {
-    outline: none;
-    border-bottom: 2px solid teal; /* Highlight color when typing */
-}
-
-.settingsSubmit {
-    align-self: center;
-    width: 150px;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    background-color: teal;
-    padding: 10px;
-    margin-top: 20px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.settingsSubmit:hover {
-    background-color: #006666; /* Slightly darker teal on hover */
-}
-
-/* Privacy Toggle Styling */
-.settingsPrivacy {
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.settingsPrivacy input[type="checkbox"] {
-    cursor: pointer;
-    accent-color: teal; /* Makes the checkbox teal instead of blue */
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .modelPrefSelects {
+    width: 100%;
+  }
+  .modelPrefSelect {
+    flex: 1;
+    min-width: 0;
+  }
 }

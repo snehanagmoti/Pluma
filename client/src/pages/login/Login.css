@@ -1,257 +1,300 @@
-/* GOOGLE FONTS IMPORT - Added 'Dancing Script' for cursive */
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;700&family=Lora:ital,wght@1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;700&display=swap');
 
-
-
-/* ... rest of your CSS below ... */
 :root {
-    --primary: #6a11cb;
-    --secondary: #2575fc;
-    /* Bright Blue */
-    --glass: rgba(255, 255, 255, 0.2);
-    --glass-border: rgba(255, 255, 255, 0.3);
-    --text-dark: #333;
+  --primary: #6a11cb;
+  --secondary: #2575fc;
+  --glass: rgba(255, 255, 255, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.3);
 }
 
 .login {
-    /* Peach to Warm Orange Gradient */
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    /* ... keep other properties ... */
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    /* Fixes position so no white borders appear */
-    overflow: hidden;
-    font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* --- AMBIENT BACKGROUND SHAPES --- */
+/* Ambient Background Shapes */
 .loginShape {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    z-index: 0;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
 }
 
 .circleOne {
-    background: #fda085;
-    /* Soft Orange */
-    width: 300px;
-    height: 300px;
-    top: -50px;
-    left: -50px;
+  background: #fda085;
+  width: 350px;
+  height: 350px;
+  top: -80px;
+  left: -80px;
+  animation: float 6s ease-in-out infinite;
 }
 
 .circleTwo {
-    background: #f6d365;
-    /* Soft Yellow */
-    width: 400px;
-    height: 400px;
-    bottom: -100px;
-    right: -50px;
+  background: #f6d365;
+  width: 450px;
+  height: 450px;
+  bottom: -120px;
+  right: -80px;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+.circleThree {
+  background: rgba(221, 36, 118, 0.2);
+  width: 200px;
+  height: 200px;
+  top: 40%;
+  left: 30%;
+  animation: float 7s ease-in-out infinite 2s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
 }
 
 .loginWrapper {
-    width: 75%;
-    height: 75%;
-    display: flex;
-    z-index: 1;
+  width: 80%;
+  max-width: 900px;
+  height: auto;
+  min-height: 500px;
+  display: flex;
+  z-index: 1;
+  animation: scaleIn 0.6s ease;
 }
 
-/* --- LEFT SIDE (Branding) --- */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Left Side - Branding */
 .loginLeft {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: white;
-    padding-right: 50px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+  padding-right: 50px;
 }
 
 .loginLogo {
-    font-family: 'Dancing Script', cursive;
-    /* <-- Cursive Font */
-    font-size: 80px;
-    /* Increased size for impact */
-    font-weight: 700;
-    margin-bottom: 10px;
-    background: linear-gradient(to right, #fff, #dcdcdc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  font-family: 'Dancing Script', cursive;
+  font-size: 80px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  background: linear-gradient(to right, #fff, #f0e6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
 }
 
 .loginDesc {
-    font-family: 'Dancing Script', cursive;
-    /* <-- Cursive Font */
-    font-size: 32px;
-    /* Increased size so it's readable */
-    font-weight: 600;
-    /* Made slightly bolder */
-    line-height: 1.4;
-    opacity: 0.95;
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.5;
+  opacity: 0.95;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
-/* --- RIGHT SIDE (The Glass Card) --- */
+/* Right Side - Glass Card */
 .loginRight {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .loginBox {
-    width: 380px;
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    /* border: 1px solid var(--glass-border);  <-- REMOVED BORDER */
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  width: 400px;
+  padding: 36px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .loginTitle {
-    color: white;
-    margin-bottom: 25px;
-    font-family: 'Dancing Script', cursive;
-    /* <-- CHANGED TO CURSIVE */
-    font-size: 36px;
-    /* Increased size slightly for the script font */
-    font-weight: 700;
-    /* Bold */
-    text-align: center;
+  color: white;
+  margin-bottom: 20px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 34px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Error Message */
+.loginError {
+  background: rgba(255, 82, 82, 0.15);
+  border: 1px solid rgba(255, 82, 82, 0.3);
+  color: #ffe0e0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .inputGroup {
-    margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .loginInput {
-    width: 100%;
-    box-sizing: border-box;
-    height: 50px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 16px;
-    padding-left: 20px;
-    transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  height: 50px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 15px;
+  padding-left: 18px;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
 }
 
 .loginInput::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .loginInput:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid white;
+  outline: none;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
 }
 
 .loginButton {
-    /* ... keep height, radius, font-family, etc. ... */
-    height: 50px;
-    width: 100%;
-    /* Ensure width is set for login button */
-    border-radius: 12px;
-    border: none;
-    font-family: 'Dancing Script', cursive;
-    font-size: 24px;
-    font-weight: 700;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    /* --- THE FIX: Deep Pink/Purple Gradient --- */
-    background: linear-gradient(to right, #e9ac32, #dd2476);
-    box-shadow: 0 4px 15px rgba(221, 36, 118, 0.4);
-    /* Matching pink glow */
+  height: 50px;
+  width: 100%;
+  border-radius: 12px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(to right, #e9ac32, #dd2476);
+  box-shadow: 0 4px 15px rgba(221, 36, 118, 0.35);
+  letter-spacing: 0.3px;
 }
 
-.loginButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(230, 44, 128, 0.6)
+.loginButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(221, 36, 118, 0.5);
 }
 
 .loginButton:disabled {
-    cursor: wait;
-    opacity: 0.7;
+  cursor: wait;
+  opacity: 0.7;
 }
 
 .loginForgot {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 14px;
-    cursor: pointer;
-    margin-bottom: 20px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  cursor: pointer;
+  margin: 12px 0;
+  transition: color 0.2s;
 }
 
 .loginForgot:hover {
-    text-decoration: underline;
+  color: white;
+  text-decoration: underline;
+}
+
+/* Divider */
+.loginDivider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 16px 0;
+}
+
+.loginDividerLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.loginDividerText {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Google Login */
+.googleLoginWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .loginHr {
-    border: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    margin: 10px 0 20px 0;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin: 4px 0 16px 0;
 }
 
-/* 2. THE REGISTER BUTTON (Purple Gradient Glow - Matching Log In) */
 .loginRegisterButton {
-    /* ... keep height, radius, font-family, etc. ... */
-    height: 50px;
-    width: 100%;
-    /* Ensure width is set for login button */
-    border-radius: 12px;
-    border: none;
-    font-family: 'Dancing Script', cursive;
-    font-size: 24px;
-    font-weight: 700;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    /* --- THE FIX: Deep Pink/Purple Gradient --- */
-    background: linear-gradient(to right, #e9ac32, #dd2476);
-    box-shadow: 0 4px 15px rgba(221, 36, 118, 0.4);
-    /* Matching pink glow */
+  height: 48px;
+  width: 100%;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .loginRegisterButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(221, 36, 118, 0.6)
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
 }
 
-/* RESPONSIVE FOR MOBILE */
+/* Mobile */
 @media screen and (max-width: 768px) {
-    .loginWrapper {
-        flex-direction: column;
-        width: 90%;
-    }
+  .loginWrapper {
+    flex-direction: column;
+    width: 92%;
+    height: auto;
+  }
 
-    .loginLeft {
-        padding-right: 0;
-        text-align: center;
-        margin-bottom: 30px;
-        flex: 0;
-    }
+  .loginLeft {
+    padding-right: 0;
+    text-align: center;
+    margin-bottom: 24px;
+    flex: 0;
+  }
 
-    .loginLogo {
-        font-size: 45px;
-    }
+  .loginLogo { font-size: 48px; }
+  .loginDesc { font-size: 18px; }
 
-    .loginDesc {
-        font-size: 18px;
-    }
-
-    .loginBox {
-        width: 100%;
-        padding: 25px;
-    }
+  .loginBox {
+    width: 100%;
+    padding: 24px;
+  }
 }

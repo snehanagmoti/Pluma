@@ -1,146 +1,163 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,600&family=Poppins:wght@300;400;500;600&display=swap');
-
 .feed {
-    flex: 5.5;
-    padding: 30px;
-    height: calc(100vh - 70px);
-    overflow-y: scroll;
-
-    /* The Golden Hour Background */
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  flex: 1;
+  padding: 24px;
 }
 
 .feedWrapper {
-    padding: 10px;
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.feedSection {
-    margin-bottom: 50px;
-    animation: fadeIn 0.5s ease-in-out;
+/* Welcome Section */
+.feedWelcome {
+  margin-bottom: 32px;
+  animation: fadeIn 0.4s ease;
 }
 
-/* --- 1. HEADINGS WITH PLUMA GRADIENT --- */
 .feedTitle {
-    font-family: 'Dancing Script', cursive;
-    /* Matches Logo Font */
-    font-size: 38px;
-    /* Larger to make the cursive readable */
-    font-weight: 700;
-    margin-bottom: 20px;
-
-    /* THE PLUMA GRADIENT (Pink/Red) */
-    background: linear-gradient(to right, #ff512f, #dd2476);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    /* Drop shadow to help it pop against the orange background */
-    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
-
-    position: relative;
-    display: inline-block;
-    padding-bottom: 5px;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
 }
 
-/* --- 2. SCROLLBARS WITH PLUMA GRADIENT --- */
-/* Horizontal Scrollbar (Carousel) */
-.feedCarousel {
-    display: flex;
-    overflow-x: auto;
-    padding: 10px 5px 25px 5px;
-    scroll-behavior: smooth;
-    gap: 20px;
+.feedSubtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  font-family: var(--font-reading);
+  font-style: italic;
 }
 
-.feedCarousel::-webkit-scrollbar {
-    height: 10px;
-    /* Slightly thicker to show the gradient better */
+/* Filters */
+.feedFilters {
+  margin-bottom: 32px;
+  animation: fadeInUp 0.5s ease;
 }
 
-.feedCarousel::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.3);
-    /* Semi-transparent white track */
-    border-radius: 10px;
+.feedTabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 12px;
 }
 
-/* The Gradient Thumb */
-.feedCarousel::-webkit-scrollbar-thumb {
-    background: linear-gradient(to right, #ff512f, #dd2476);
-    border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    /* White border makes it look like a capsule */
+.feedTab {
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
 }
 
-.feedCarousel::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to right, #dd2476, #ff512f);
-    /* Reverses on hover */
+.feedTab:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
 }
 
-/* Vertical Scrollbar (Main Page) */
-.feed::-webkit-scrollbar {
-    width: 8px;
+.feedTab.active {
+  color: var(--accent-pink);
+  background: rgba(221, 36, 118, 0.08);
 }
 
-.feed::-webkit-scrollbar-track {
-    background: transparent;
+/* Genre Chips */
+.genreChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.feed::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #ff512f, #dd2476);
-    border-radius: 10px;
+.genreChip {
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-transform: capitalize;
 }
 
-/* --- SEARCH FILTERS --- */
-.searchFilters {
-    margin-bottom: 30px;
-    padding: 15px 25px;
-    background: rgba(255, 255, 255, 0.3);
-    /* Glassy White */
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.genreChip:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
 }
 
-.filterLabel {
-    font-weight: 600;
-    color: #fff;
-    /* White text for contrast */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    margin-right: 10px;
+.genreChip.active {
+  background: var(--accent-gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shadow-glow);
 }
 
-.radioText {
-    margin-left: 8px;
-    font-size: 14px;
-    color: #fff;
-    font-weight: 500;
+/* Content Grid */
+.feedContent {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
-.wrapCarousel {
-    flex-wrap: wrap;
-    overflow-x: visible;
+.feedAnimItem {
+  animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.noResults,
-.emptyLibrary {
-    color: white;
-    font-style: italic;
-    font-size: 18px;
-    padding: 10px;
+/* Skeletons */
+.bookCardSkeleton {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  height: 400px;
+  border: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+.skel-img {
+  width: 100%;
+  height: 220px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.skel-title {
+  width: 80%;
+  height: 20px;
+  margin-bottom: 12px;
+}
+
+.skel-text {
+  width: 100%;
+  height: 40px;
+  margin-bottom: auto;
+}
+
+.skel-tags {
+  width: 60%;
+  height: 24px;
+}
+
+.feedEmpty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 0;
+  color: var(--text-muted);
+}
+
+@media screen and (max-width: 768px) {
+  .feed {
+    padding: 16px;
+  }
+  .feedContent {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  }
 }

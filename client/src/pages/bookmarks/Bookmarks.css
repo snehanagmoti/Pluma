@@ -1,30 +1,97 @@
-.bookmarksContainer {
-    display: flex;
-    width: 100%;
+.bookmarksPage {
+  display: flex;
+  min-height: calc(100vh - 64px);
 }
 
-.bookmarksRight {
-    flex: 9; /* Takes up the rest of the space next to sidebar */
-    padding: 20px;
+.bookmarksMain {
+  flex: 7;
+  padding: 32px;
 }
 
-.bookmarksTitle {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-    border-bottom: 2px solid teal;
-    display: inline-block;
-    padding-bottom: 5px;
+.bookmarksHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
-.bookmarksWrapper {
-    display: flex;
-    flex-wrap: wrap; /* Allows books to flow to the next line */
-    gap: 20px; /* Space between cards */
+.bookmarksHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.noBookmarks {
-    font-size: 18px;
-    color: gray;
-    margin-top: 20px;
+.bookmarksHeaderLeft h1 {
+  font-size: 28px;
+  font-weight: 700;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bookmarksIcon {
+  font-size: 22px;
+  color: var(--accent-gold);
+}
+
+.bookmarksSortWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sortIcon {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.bookmarksSort {
+  padding: 8px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 13px;
+  color: var(--text-secondary);
+  outline: none;
+  cursor: pointer;
+  background: white;
+}
+
+.bookmarksCount {
+  display: block;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.bookmarksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.bookmarkAnimItem {
+  animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.bookmarksEmpty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.bookmarksEmptyIcon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.bookmarksEmpty h2 {
+  font-size: 22px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.bookmarksEmpty p {
+  font-size: 15px;
+  color: var(--text-muted);
 }

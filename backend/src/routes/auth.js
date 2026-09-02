@@ -1,11 +1,21 @@
 // src/routes/auth.js
 const router = require("express").Router();
-const { registerUser, loginUser } = require("../controllers/authController"); // Import loginUser
+const { verifyToken } = require("../middleware/auth");
+const {
+  registerUser,
+  loginUser,
+  googleAuth,
+  getProfile,
+  getUserByUsername
+} = require("../controllers/authController");
 
-// REGISTER
+// Public Routes
 router.post("/register", registerUser);
-
-// LOGIN (New Route)
 router.post("/login", loginUser);
+router.post("/google", googleAuth);
+
+// Protected Routes
+router.get("/profile", verifyToken, getProfile);
+router.get("/user/:username", verifyToken, getUserByUsername);
 
 module.exports = router;

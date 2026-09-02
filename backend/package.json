@@ -11,12 +11,20 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "@langchain/anthropic": "^1.5.8",
+    "@langchain/core": "^1.2.9",
+    "@langchain/google-genai": "^2.3.0",
+    "@langchain/openai": "^1.5.10",
     "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "google-auth-library": "^11.0.2",
+    "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
+    "kafkajs": "^2.2.4",
     "mongoose": "^8.20.2"
   },
   "devDependencies": {

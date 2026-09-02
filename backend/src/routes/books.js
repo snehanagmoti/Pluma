@@ -1,38 +1,37 @@
-// server/src/routes/books.js
+// src/routes/books.js
 const router = require("express").Router();
-
-// 1. Import the middleware you created
-// Ensure your auth.js is exporting properly
 const { verifyToken } = require("../middleware/auth");
-
-const { 
-  createBook, 
-  updateBook, 
-  getBook, 
-  getAllBooks, 
-  getUserBooks,
-  searchBooks
+const {
+  createBook,
+  getAllBooks,
+  getMyBooks,
+  getBook,
+  updateBook,
+  deleteBook,
+  likeBook,
+  addComment,
+  getPlanningBoard,
+  updatePlanningBoard,
+  getStoryCanvas,
+  updateStoryCanvas,
 } = require("../controllers/bookController");
 
-/* 2. Apply middleware (verifyToken) as the second argument.
-   Now, if a user hits these routes without a token, the 
-   server will reject the request.
-*/
+// Public
+router.get("/all", verifyToken, getAllBooks);
+router.get("/mine", verifyToken, getMyBooks);
 
-// WRITE OPERATIONS (Crucial to protect)
+// Protected
 router.post("/", verifyToken, createBook);
+router.get("/:id/planning", verifyToken, getPlanningBoard);
+router.put("/:id/planning", verifyToken, updatePlanningBoard);
+router.get("/:id/canvas", verifyToken, getStoryCanvas);
+router.put("/:id/canvas", verifyToken, updateStoryCanvas);
+router.get("/:id", verifyToken, getBook);
 router.put("/:id", verifyToken, updateBook);
+router.delete("/:id", verifyToken, deleteBook);
+router.put("/:id/like", verifyToken, likeBook);
 
-// READ OPERATIONS
-// You specifically mentioned you don't want the homepage (Feed) visible 
-// without login, so we MUST protect 'getAllBooks'.
-router.get("/public", verifyToken, getAllBooks); 
-
-// Protect Search and Profile views
-router.get("/search", verifyToken, searchBooks); 
-router.get("/profile/:username", verifyToken, getUserBooks); 
-
-// Protect individual book view
-router.get("/find/:id", verifyToken, getBook);
+// ADD COMMENT
+router.post("/:id/comment", verifyToken, addComment);
 
 module.exports = router;

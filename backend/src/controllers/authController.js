@@ -2,73 +2,197 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// apiKeys.* are schema-level select:false. Excluding both the parent and its
+// children produces a Mongo projection path collision, so only list top-level
+// secrets here.
+const PRIVATE_FIELDS = "-password -googleId";
+
+// Helper: generate JWT token
+const generateToken = (user) => {
+  if (!process.env.JWT_SECRET) throw new Error("JWT_SECRET is required");
+  return jwt.sign(
+    { id: user._id, isAdmin: user.isAdmin },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+};
+
+// Helper: sanitize user response (remove password)
+const sanitizeUser = (user) => {
+  const { password, googleId, apiKeys, ...userData } = user._doc || user;
+  return userData;
+};
 
 // REGISTER
 const registerUser = async (req, res) => {
   try {
-    // 1. Destructure data from the request body
     const { username, email, password } = req.body;
 
-    // 2. Check if user already exists
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    // 3. Generate a "Salt" and Hash the password
-    // A salt is random data added to the password before hashing makes it harder to crack
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      if (existingUser.email === email) {
+        return res.status(400).json({ message: "Email is already registered" });
+      }
+      return res.status(400).json({ message: "Username is already taken" });
+    }
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 4. Create a new user instance with the hashed password
     const newUser = new User({
-      username: username,
-      email: email,
+      username,
+      email,
       password: hashedPassword,
+      authProvider: "local",
     });
 
-    // 5. Save the user to MongoDB
     const user = await newUser.save();
+    const token = generateToken(user);
 
-    // 6. Respond to the client (we don't send the password back)
-    res.status(200).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      message: "User registered successfully!",
+    res.status(201).json({
+      ...sanitizeUser(user),
+      token,
+      message: "Account created successfully!",
     });
   } catch (err) {
-    console.log(err);
-    res.status(500).json(err);
+    console.error("Register error:", err);
+    res.status(500).json({ message: "Server error. Please try again." });
   }
 };
+
 // LOGIN
 const loginUser = async (req, res) => {
   try {
-    // 1. Find User
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(404).json("User not found");
+    const { email, password } = req.body;
 
-    // 2. Check Password
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).json("Wrong password");
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
 
-    // 3. GENERATE ACCESS TOKEN (The Wristband) <--- NEW PART
-    // We put the user's ID inside the token so we know who it belongs to
-    const token = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin }, // Payload (Data inside token)
-      process.env.JWT_SECRET,                  // Secret Key
-      { expiresIn: "5d" }                      // Token expires in 5 days
-    );
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      return res.status(404).json({ message: "No account found with this email" });
+    }
 
-    // 4. Return user info AND the token
-    // We separate the password from the rest of the data so we don't send it back
-    const { password, ...otherDetails } = user._doc;
+    if (user.authProvider === "google" && !user.password) {
+      return res.status(400).json({
+        message: "This account uses Google Sign-In. Please use the Google button."
+      });
+    }
 
-    res.status(200).json({ ...otherDetails, token }); // Send token to frontend
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json({ message: "Incorrect password" });
+    }
+
+    const token = generateToken(user);
+
+    res.status(200).json({ ...sanitizeUser(user), token });
   } catch (err) {
-    res.status(500).json(err);
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error. Please try again." });
   }
 };
 
-module.exports = { registerUser, loginUser };
+// GOOGLE AUTH
+const googleAuth = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({ message: "Google credential is required" });
+    }
+
+    // Verify the Google token
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name, picture } = payload;
+
+    // Check if user already exists
+    let user = await User.findOne({ $or: [{ googleId }, { email }] }).select("+googleId");
+
+    if (user) {
+      // Update Google info if needed
+      if (!user.googleId) {
+        user.googleId = googleId;
+        user.authProvider = "google";
+        if (!user.avatar) user.avatar = picture;
+        await user.save();
+      }
+    } else {
+      // Create new user
+      // Generate unique username from name
+      let username = name.replace(/\s+/g, '').toLowerCase();
+      const existingUsername = await User.findOne({ username });
+      if (existingUsername) {
+        username = `${username}${Date.now().toString().slice(-4)}`;
+      }
+
+      user = new User({
+        username,
+        email,
+        googleId,
+        authProvider: "google",
+        avatar: picture,
+        profilePicture: picture,
+      });
+      await user.save();
+    }
+
+    const token = generateToken(user);
+
+    res.status(200).json({ ...sanitizeUser(user), token });
+  } catch (err) {
+    console.error("Google auth error:", err);
+    res.status(500).json({ message: "Google authentication failed. Please try again." });
+  }
+};
+
+// GET PROFILE
+const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select(PRIVATE_FIELDS)
+      .populate("library")
+      .populate("recommendedForYou");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error("Profile error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// GET USER BY USERNAME
+const getUserByUsername = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username })
+      .select(PRIVATE_FIELDS);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error("Get user error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { registerUser, loginUser, googleAuth, getProfile, getUserByUsername };

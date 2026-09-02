@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 pymongo
-scikit-learn
 pandas
 python-dotenv
 numpy
+cachetools

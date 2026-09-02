@@ -1,20 +1,319 @@
-/* 1. RESET ALL DEFAULT MARGINS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    /* Ensures padding doesn't break layouts */
+/* === PLUMA DESIGN SYSTEM === */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Warm Golden Hour Palette */
+  --primary-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  --accent-gradient: linear-gradient(to right, #ff512f, #dd2476);
+  --button-gradient: linear-gradient(to right, #e9ac32, #dd2476);
+
+  /* Base Colors */
+  --warm-yellow: #f6d365;
+  --warm-orange: #fda085;
+  --accent-pink: #dd2476;
+  --accent-red: #ff512f;
+  --accent-gold: #e9ac32;
+
+  /* UI Colors */
+  --bg-primary: #fcfcfc;
+  --bg-warm: rgba(255, 250, 227, 0.95);
+  --bg-card: rgba(255, 255, 255, 0.95);
+  --bg-glass: rgba(255, 255, 255, 0.2);
+  --bg-glass-strong: rgba(255, 255, 255, 0.85);
+
+  /* Text Colors */
+  --text-primary: #1a1a2e;
+  --text-secondary: #555;
+  --text-muted: #888;
+  --text-white: #ffffff;
+
+  /* Borders & Shadows */
+  --border-light: rgba(0, 0, 0, 0.06);
+  --border-glass: rgba(255, 255, 255, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 4px 15px rgba(221, 36, 118, 0.2);
+  --shadow-gold: 0 4px 15px rgba(233, 172, 50, 0.3);
+
+  /* Spacing */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 50px;
+
+  /* Typography */
+  --font-primary: 'Poppins', sans-serif;
+  --font-display: 'Dancing Script', cursive;
+  --font-reading: 'Lora', serif;
+  --font-ui: 'Inter', sans-serif;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* 2. REMOVE BODY MARGIN */
+[data-theme="dark"] {
+  --bg-primary: #0f1117;
+  --bg-warm: rgba(28, 26, 27, 0.96);
+  --bg-card: rgba(27, 30, 39, 0.98);
+  --bg-glass: rgba(32, 35, 45, 0.58);
+  --bg-glass-strong: rgba(25, 28, 37, 0.9);
+  --text-primary: #f6f2f4;
+  --text-secondary: #c1bbc1;
+  --text-muted: #928b94;
+  --border-light: rgba(255, 255, 255, 0.1);
+  --border-glass: rgba(255, 255, 255, 0.14);
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.34);
+  --shadow-lg: 0 16px 44px rgba(0, 0, 0, 0.45);
+}
+
+/* === RESET === */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    /* Removes the white border */
-    padding: 0;
-    width: 100%;
-    overflow-x: hidden;
-    /* Prevents horizontal scrolling */
-    font-family: 'Poppins', sans-serif;
-    background-color: #fcfcfc;
-    /* Clean background for the whole app */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: var(--font-primary);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+[data-theme="dark"] .topbarContainer,
+[data-theme="dark"] .sidebar,
+[data-theme="dark"] .rightbar,
+[data-theme="dark"] .userDropdown,
+[data-theme="dark"] .notificationDropdown,
+[data-theme="dark"] .writeEditor,
+[data-theme="dark"] .writeAiSidebar,
+[data-theme="dark"] .singleMain,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+[data-theme="dark"] .skeleton{background:linear-gradient(90deg,#242733 25%,#303441 50%,#242733 75%);background-size:200% 100%}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--accent-red), var(--accent-pink));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, var(--accent-pink), var(--accent-red));
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* === UTILITY CLASSES === */
+.gradient-text {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: var(--bg-glass-strong);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-light);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+/* === LINKS === */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* === BUTTONS === */
+.btn-primary {
+  background: var(--button-gradient);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(221, 36, 118, 0.35);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--accent-pink);
+  border: 2px solid var(--accent-pink);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-secondary:hover {
+  background: var(--accent-pink);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid var(--border-glass);
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+/* === CARDS === */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  transition: var(--transition-smooth);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+/* === TAG / BADGE === */
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+}
+
+.tag-genre {
+  background: rgba(221, 36, 118, 0.1);
+  color: var(--accent-pink);
+}
+
+.tag-gold {
+  background: rgba(233, 172, 50, 0.15);
+  color: #b8860b;
+}
+/* Route-level lazy loading keeps heavy editor and canvas code out of the first paint. */
+.routeFallback {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-primary, #2f2740);
+  background: var(--bg-primary, #f7f4ff);
+  font-weight: 600;
+}
+
+.routeFallbackSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: routeFallbackSpin 0.7s linear infinite;
+}
+
+@keyframes routeFallbackSpin {
+  to { transform: rotate(360deg); }
 }

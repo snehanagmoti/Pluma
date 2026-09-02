@@ -1,0 +1,287 @@
+.canvasPage {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 64px);
+  background: var(--bg-primary);
+}
+
+/* Toolbar */
+.canvasToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 10;
+}
+
+.canvasTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.canvasToolbarCenter {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.canvasToolbarActions {
+  display: flex;
+  gap: 8px;
+}
+
+.canvasToolBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+}
+
+.canvasToolBtn:hover:not(:disabled) {
+  border-color: var(--accent-pink);
+  color: var(--accent-pink);
+}
+
+.canvasToolBtn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.canvasBackBtn { color: var(--text-muted); }
+.canvasAddBtn { border-color: #6c63ff; color: #6c63ff; }
+.canvasAddBtn:hover { background: #6c63ff !important; color: white !important; }
+.canvasAiBtn { border-color: #a855f7; color: #a855f7; }
+.canvasAiBtn:hover:not(:disabled) { background: #a855f7 !important; color: white !important; }
+.canvasWeaveBtn { border-color: #dd2476; color: #dd2476; }
+.canvasWeaveBtn:hover:not(:disabled) { background: linear-gradient(135deg, #ff512f, #dd2476) !important; color: white !important; }
+.canvasSaveBtn { border-color: #10b981; color: #10b981; }
+.canvasSaveBtn:hover { background: #10b981 !important; color: white !important; }
+
+/* Canvas Container */
+.canvasContainer {
+  flex: 1;
+  width: 100%;
+}
+
+.canvasContainer .react-flow__node {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.canvasContainer .react-flow__node:hover {
+  transform: scale(1.02);
+}
+
+.canvasContainer .react-flow__node.selected {
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.4) !important;
+}
+
+/* Side Panels */
+.canvasPanel {
+  position: fixed;
+  top: 128px;
+  right: 20px;
+  width: 340px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  animation: slideInRight 0.3s ease;
+  overflow: hidden;
+}
+
+.canvasPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.canvasPanelHeader h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.canvasPanelHeader button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.canvasPanelBody {
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.canvasFormGroup {
+  margin-bottom: 16px;
+}
+
+.canvasFormGroup label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.canvasNodeTypes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.canvasNodeTypeBtn {
+  padding: 8px;
+  border-radius: var(--radius-md);
+  border: 2px solid;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-family: var(--font-primary);
+  text-align: center;
+}
+
+.canvasNodeTypeBtn:hover {
+  transform: scale(1.03);
+}
+
+.canvasInput {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+  background: var(--bg-primary);
+  box-sizing: border-box;
+}
+
+.canvasInput:focus {
+  border-color: #6c63ff;
+}
+
+.canvasTextarea {
+  resize: vertical;
+  min-height: 60px;
+  line-height: 1.5;
+}
+
+.canvasAddNodeBtn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #6c63ff, #a855f7);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-family: var(--font-primary);
+}
+
+.canvasAddNodeBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+}
+
+/* Node Detail Panel */
+.nodeDetailType {
+  margin-bottom: 12px;
+}
+
+.nodeTypeBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nodeDetailContent {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: var(--radius-md);
+}
+
+.nodeDeleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 1px solid #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+  color: #ef4444;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-family: var(--font-primary);
+  width: 100%;
+  justify-content: center;
+}
+
+.nodeDeleteBtn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+@media screen and (max-width: 768px) {
+  .canvasToolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .canvasToolbarCenter {
+    order: -1;
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+  .canvasPanel {
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+  }
+}
+.canvasToolbarActions select{max-width:180px;border:1px solid rgba(127,127,127,.25);border-radius:9px;padding:8px;background:var(--bg-card);color:var(--text-primary)}
+.canvasSaveState{font-size:10px;font-weight:700;color:#15803d}.canvasSaveState-error{color:#b45309}

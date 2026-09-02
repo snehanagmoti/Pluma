@@ -1,143 +1,151 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Feed.css";
 import BookCard from "../bookCard/BookCard";
-import axios from "axios";
+import API from "../../config/axios";
+import { FaFire, FaClockRotateLeft, FaWandMagicSparkles } from "react-icons/fa6";
+
+const FALLBACK_GENRES = [
+  { name: "Fantasy" }, { name: "Romance" }, { name: "Sci-Fi" },
+  { name: "Mystery" }, { name: "Thriller" }, { name: "Adventure" },
+  { name: "Horror" }, { name: "Poetry" }
+];
 
 export default function Feed({ query }) {
   const [books, setBooks] = useState([]);
-  const [library, setLibrary] = useState([]);
-  const [recommendations, setRecommendations] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
-  const [searchType, setSearchType] = useState("book"); // 'book' or 'author'
-
+  const [genres, setGenres] = useState(FALLBACK_GENRES);
+  const [activeGenre, setActiveGenre] = useState("all");
+  const [activeTab, setActiveTab] = useState("foryou");
+  const [loading, setLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // 1. Initial Load
   useEffect(() => {
-    const fetchBooks = async () => {
+    const fetchFeedData = async () => {
+      setLoading(true);
       try {
-        const token = localStorage.getItem("token");
-        const authHeader = { headers: { Authorization: `Bearer ${token}` } };
-
-        const res = await axios.get("http://localhost:5000/api/books/public", authHeader);
-        setBooks(res.data);
-
-        if (user) {
-          const libRes = await axios.get(
-            `http://localhost:5000/api/users/${user._id}/library`,
-            authHeader
-          );
-          setLibrary(libRes.data);
-
-          const recRes = await axios.get(
-            `http://localhost:5000/api/users/${user._id}/recommendations`,
-            authHeader
-          );
-          setRecommendations(recRes.data);
+        let fetchedBooks = [];
+        if (activeTab === "foryou") {
+          const response = await API.get("/recommendations?mode=personalized&limit=32");
+          fetchedBooks = response.data.books || [];
+        } else if (activeTab === 'trending') {
+          const response = await API.get("/recommendations?mode=trending&limit=32");
+          fetchedBooks = response.data.books || [];
+        } else {
+          const [community, catalog] = await Promise.all([API.get("/books/all?limit=24"), API.get("/catalog/featured")]);
+          fetchedBooks = [...(community.data || []), ...(catalog.data.books || []).slice(0, 8)];
         }
+        const genreNames = [...new Set(fetchedBooks.flatMap(book => book.genres || []).map(value => String(value).toLowerCase()))].slice(0, 12);
+        setGenres(genreNames.length ? genreNames.map(name => ({ name })) : FALLBACK_GENRES);
+        setBooks(fetchedBooks);
       } catch (err) {
-        console.log("Error fetching feed:", err);
+        console.error("Feed error:", err);
+        setBooks([]);
       }
+      setLoading(false);
     };
-    fetchBooks();
-  }, [user?._id]);
 
-  // 2. Search Logic
-  useEffect(() => {
-    const fetchSearch = async () => {
-      if (query.length === 0) {
-        setSearchResults([]);
-        return;
-      }
-      try {
-        const token = localStorage.getItem("token");
-        const authHeader = { headers: { Authorization: `Bearer ${token}` } };
-        const res = await axios.get(
-          `http://localhost:5000/api/books/search?q=${query}&type=${searchType}`,
-          authHeader
-        );
-        setSearchResults(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    const timer = setTimeout(() => { fetchSearch(); }, 500);
-    return () => clearTimeout(timer);
-  }, [query, searchType]);
+    fetchFeedData();
+  }, [activeTab]); // Fetch when tab changes
+
+  // Filter books based on search query, genre, and active tab
+  const filteredBooks = books.filter(book => {
+    const matchesSearch = !query ||
+      book.title?.toLowerCase().includes(query.toLowerCase()) ||
+      book.authorName?.toLowerCase().includes(query.toLowerCase()) ||
+      book.genres?.some(g => g.toLowerCase().includes(query.toLowerCase()));
+
+    const matchesGenre = activeGenre === "all" ||
+      book.genres?.some(g => g.toLowerCase() === activeGenre.toLowerCase());
+
+    return matchesSearch && matchesGenre;
+  });
+
+  // Get time-based greeting
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 17) return "Good Afternoon";
+    return "Good Evening";
+  };
 
   return (
     <div className="feed">
       <div className="feedWrapper">
 
-        {/* --- SEARCH MODE --- */}
-        {query ? (
-          <>
-            {/* Glass Filter Panel */}
-            <div className="searchFilters">
-              <span className="filterLabel">Filter results by:</span>
+        {/* Welcome Section */}
+        <div className="feedWelcome">
+          <h1 className="feedTitle">
+            {getGreeting()}, <span className="gradient-text">{user?.username}</span>
+          </h1>
+          <p className="feedSubtitle">Ready to dive into a new world today?</p>
+        </div>
 
-              <label className="radioLabel">
-                <input
-                  type="radio"
-                  name="filter"
-                  checked={searchType === "book"}
-                  onChange={() => setSearchType("book")}
-                />
-                <span className="radioText">Title</span>
-              </label>
+        {/* Filters & Tags */}
+        <div className="feedFilters">
+          <div className="feedTabs">
+            <button
+              className={`feedTab ${activeTab === 'foryou' ? 'active' : ''}`}
+              onClick={() => setActiveTab('foryou')}
+            >
+              <FaWandMagicSparkles /> For You
+            </button>
+            <button
+              className={`feedTab ${activeTab === 'trending' ? 'active' : ''}`}
+              onClick={() => setActiveTab('trending')}
+            >
+              <FaFire /> Trending
+            </button>
+            <button
+              className={`feedTab ${activeTab === 'recent' ? 'active' : ''}`}
+              onClick={() => setActiveTab('recent')}
+            >
+              <FaClockRotateLeft /> Recent
+            </button>
+          </div>
 
-              <label className="radioLabel">
-                <input
-                  type="radio"
-                  name="filter"
-                  checked={searchType === "author"}
-                  onChange={() => setSearchType("author")}
-                />
-                <span className="radioText">Author</span>
-              </label>
-            </div>
+          <div className="genreChips">
+            <button
+              className={`genreChip ${activeGenre === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveGenre('all')}
+            >
+              All
+            </button>
+            {genres.slice(0, 8).map(g => (
+              <button
+                key={g.name}
+                className={`genreChip ${activeGenre === g.name ? 'active' : ''}`}
+                onClick={() => setActiveGenre(g.name)}
+              >
+                {g.name}
+              </button>
+            ))}
+          </div>
+        </div>
 
-            <div className="feedSection">
-              <h2 className="feedTitle">Search Results for "{query}"</h2>
-              <div className="feedCarousel wrapCarousel">
-                {searchResults.length > 0 ? (
-                  searchResults.map((book) => <BookCard key={book._id} book={book} />)
-                ) : (
-                  <span className="noResults">No results found.</span>
-                )}
+        {/* Content Grid */}
+        <div className="feedContent">
+          {loading ? (
+            // Skeleton loaders
+            Array.from({ length: 8 }).map((_, i) => (
+              <div key={`skel-${i}`} className="bookCardSkeleton">
+                <div className="skeleton skel-img"></div>
+                <div className="skeleton skel-title"></div>
+                <div className="skeleton skel-text"></div>
+                <div className="skeleton skel-tags"></div>
               </div>
-            </div>
-          </>
-        ) : (
-
-          /* --- NORMAL FEED MODE --- */
-          <>
-            <div className="feedSection">
-              <h2 className="feedTitle">
-                {recommendations.length > 0 ? "Recommended For You (AI)" : "Trending Books"}
-              </h2>
-              <div className="feedCarousel">
-                {recommendations.length > 0
-                  ? recommendations.map((book) => <BookCard key={book._id} book={book} />)
-                  : books.map((book) => <BookCard key={book._id} book={book} />)
-                }
+            ))
+          ) : filteredBooks.length > 0 ? (
+            filteredBooks.map((book, i) => (
+              <div key={book._id} className="feedAnimItem" style={{ animationDelay: `${i * 0.05}s` }}>
+                <BookCard book={book} />
               </div>
+            ))
+          ) : (
+            <div className="feedEmpty">
+              <h2>No books found.</h2>
+              <p>Try another genre, browse the real-book catalog, or start a story of your own.</p>
             </div>
-
-            <div className="feedSection">
-              <h2 className="feedTitle">Your Library</h2>
-              <div className="feedCarousel">
-                {user && library.length > 0 ? (
-                  library.map((book) => <BookCard key={book._id} book={book} />)
-                ) : (
-                  <span className="emptyLibrary">
-                    {user ? "No books saved yet." : "Login to see your library."}
-                  </span>
-                )}
-              </div>
-            </div>
-          </>
-        )}
+          )}
+        </div>
 
       </div>
     </div>

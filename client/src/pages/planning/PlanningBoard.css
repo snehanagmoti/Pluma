@@ -1,0 +1,357 @@
+.planningPage {
+  min-height: calc(100vh - 64px);
+  padding: 34px 32px 40px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(246, 211, 101, 0.15), transparent 28%),
+    radial-gradient(circle at 95% 8%, rgba(221, 36, 118, 0.08), transparent 24%),
+    var(--bg-primary);
+}
+
+.planningHeader {
+  max-width: 1500px;
+  margin: 0 auto 26px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.planningEyebrow {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--accent-pink);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.planningHeader h1 {
+  margin: 0;
+  background: var(--accent-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.15;
+}
+
+.planningHeaderMain p {
+  margin-top: 7px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.planningHeaderActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.planningHeaderActions button,
+.planningTotal,
+.planningSaveStatus,
+.planningProjectSelect {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 13px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font: 600 12px var(--font-primary);
+}
+
+.planningProjectSelect {
+  max-width: 220px;
+  outline: none;
+  cursor: pointer;
+}
+
+.planningProjectSelect:focus { border-color: var(--accent-pink); }
+
+.planningSaveStatus {
+  color: #0b7d5d;
+  border-color: rgba(16, 185, 129, 0.18);
+  background: rgba(16, 185, 129, 0.07);
+}
+
+.planningSaveStatus-saving { color: #9a6a08; background: rgba(245, 158, 11, 0.08); }
+.planningSaveStatus-error { color: #c53030; background: rgba(239, 68, 68, 0.08); }
+
+.planningStateCard {
+  max-width: 620px;
+  min-height: 280px;
+  margin: 70px auto;
+  padding: 42px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-md);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.planningStateCard > svg { font-size: 36px; color: var(--accent-pink); }
+.planningStateCard h2 { color: var(--text-primary); }
+.planningStateCard p { max-width: 460px; font-size: 13px; line-height: 1.7; }
+
+.planningStateCard button {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--button-gradient);
+  color: white;
+  font: 600 13px var(--font-primary);
+  cursor: pointer;
+}
+
+.planningStateError { color: #c53030; }
+
+.planningHeaderActions button {
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.planningHeaderActions button:hover {
+  border-color: rgba(221, 36, 118, 0.3);
+  color: var(--accent-pink);
+  transform: translateY(-1px);
+}
+
+.planningTotal {
+  border-color: rgba(233, 172, 50, 0.2);
+  background: rgba(233, 172, 50, 0.08);
+  color: #9a6a08;
+}
+
+.planningBoard {
+  max-width: 1500px;
+  min-height: calc(100vh - 210px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(245px, 1fr));
+  gap: 15px;
+  overflow-x: auto;
+  padding: 2px 2px 14px;
+  align-items: start;
+}
+
+.planningColumn {
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: calc(100vh - 215px);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  border-top: 3px solid var(--column-accent);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(12px);
+}
+
+.planningColumnHeader {
+  padding: 16px 16px 13px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.planningColumnTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.planningColumnIcon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--column-accent) 12%, white);
+  color: var(--column-accent);
+  font-size: 14px;
+}
+
+.planningColumnHeader h2 {
+  flex: 1;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.planningColumnCount {
+  display: grid;
+  min-width: 23px;
+  height: 23px;
+  padding: 0 6px;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--column-accent) 10%, white);
+  color: var(--column-accent);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.planningColumnHeader > p {
+  margin: 6px 0 0 36px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.planningCardList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-height: 150px;
+  padding: 12px;
+  overflow-y: auto;
+  transition: background 0.2s ease;
+}
+
+.planningCardList.isOver {
+  background: color-mix(in srgb, var(--column-accent) 5%, transparent);
+}
+
+.planningEmptyColumn {
+  display: grid;
+  min-height: 96px;
+  place-items: center;
+  border: 1px dashed color-mix(in srgb, var(--column-accent) 28%, transparent);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.planningCard {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 8px;
+  padding: 12px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.045);
+  touch-action: none;
+}
+
+.planningCard.isDragging {
+  opacity: 0.35;
+}
+
+.planningCardOverlay {
+  width: 250px;
+  border-color: rgba(108, 99, 255, 0.3);
+  box-shadow: 0 14px 30px rgba(27, 20, 74, 0.18);
+  transform: rotate(2deg);
+}
+
+.planningCard p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.planningCardHandle,
+.planningCardDelete {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #b0b0b8;
+  font-size: 12px;
+}
+
+button.planningCardHandle {
+  cursor: grab;
+}
+
+button.planningCardHandle:active { cursor: grabbing; }
+
+.planningCardDelete {
+  cursor: pointer;
+  opacity: 0;
+  transition: var(--transition-fast);
+}
+
+.planningCard:hover .planningCardDelete,
+.planningCardDelete:focus-visible {
+  opacity: 1;
+}
+
+.planningCardDelete:hover { color: #ef4444; }
+
+.planningAddCard {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 7px;
+  padding: 11px;
+  border-top: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.74);
+}
+
+.planningAddCard input {
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 9px;
+  outline: none;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: 11px var(--font-primary);
+}
+
+.planningAddCard input:focus {
+  border-color: var(--column-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--column-accent) 10%, transparent);
+}
+
+.planningAddCard button {
+  display: grid;
+  width: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: 9px;
+  background: var(--column-accent);
+  color: white;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.planningAddCard button:hover:not(:disabled) { transform: translateY(-1px); }
+.planningAddCard button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+@media screen and (max-width: 900px) {
+  .planningPage { padding: 24px 16px 30px; }
+  .planningHeader { align-items: flex-start; flex-direction: column; }
+  .planningHeaderActions { justify-content: flex-start; }
+  .planningBoard {
+    grid-template-columns: repeat(5, minmax(270px, 78vw));
+    min-height: calc(100vh - 245px);
+  }
+  .planningColumn { max-height: calc(100vh - 255px); }
+  .planningCardDelete { opacity: 1; }
+}
+
+@media screen and (max-width: 520px) {
+  .planningHeaderActions { width: 100%; }
+  .planningTotal { width: 100%; justify-content: center; }
+  .planningBoard { grid-template-columns: repeat(5, minmax(285px, 88vw)); }
+}

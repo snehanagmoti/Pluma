@@ -1,0 +1,36 @@
+.communityPage { display: flex; min-height: calc(100vh - 64px); background: var(--bg-primary); }
+.communityMain { flex: 1; max-width: 760px; padding: 28px 24px 60px; }
+.communityHeader { margin-bottom: 20px; }
+.communityHeader > span { color: var(--accent-pink); font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
+.communityHeader h1 { margin-top: 5px; color: var(--text-primary); font-size: clamp(24px, 3vw, 34px); line-height: 1.2; }
+.communityHeader p { max-width: 650px; margin-top: 7px; color: var(--text-muted); font: 13px/1.65 var(--font-reading); }
+.communityTabs { display: flex; align-items: center; gap: 7px; margin: 18px 0 13px; padding-bottom: 11px; border-bottom: 1px solid var(--border-light); }
+.communityTabs button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--text-muted); font: 600 11px var(--font-primary); cursor: pointer; }
+.communityTabs button.active { background: rgba(221, 36, 118, 0.08); color: var(--accent-pink); }
+.communityTabs .communityRefresh { margin-left: auto; font-size: 16px; }
+.communityFeed { display: flex; flex-direction: column; gap: 12px; }
+.communityPostSkeleton { height: 190px; border-radius: var(--radius-lg); }
+.communityFeedState { min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border: 1px dashed var(--border-light); border-radius: var(--radius-lg); color: var(--text-muted); text-align: center; }
+.communityFeedState > svg { font-size: 34px; color: #6c63ff; }
+.communityFeedState h2 { color: var(--text-primary); font-size: 17px; }
+.communityFeedState p { font-size: 12px; }
+.communityFeedState button { padding: 8px 13px; border: 0; border-radius: var(--radius-md); background: #6c63ff; color: white; cursor: pointer; }
+.communityRail { flex: 0 0 290px; padding: 28px 24px 50px 0; }
+.communityRailCard { margin-bottom: 14px; padding: 16px; border: 1px solid var(--border-light); border-radius: var(--radius-lg); background: var(--bg-card); box-shadow: var(--shadow-sm); }
+.communityRailTitle { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; color: var(--text-primary); font-size: 12px; font-weight: 800; }
+.communityRailTitle svg { color: var(--accent-pink); }
+.communityChannelLink,
+.communityPersonLink { width: 100%; display: flex; align-items: center; gap: 9px; padding: 9px 4px; border: 0; border-bottom: 1px solid var(--border-light); background: transparent; text-align: left; cursor: pointer; }
+.communityChannelLink > span { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 9px; background: rgba(108, 99, 255, 0.08); }
+.communityChannelLink div,
+.communityPersonLink span { display: flex; flex-direction: column; min-width: 0; }
+.communityChannelLink strong,
+.communityPersonLink strong { color: var(--text-primary); font-size: 11px; }
+.communityChannelLink small,
+.communityPersonLink small { overflow: hidden; color: var(--text-muted); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.communityPersonLink > div { display: grid; width: 32px; height: 32px; place-items: center; overflow: hidden; border-radius: 50%; background: var(--accent-gradient); color: white; font-size: 11px; font-weight: 700; }
+.communityPersonLink img { width: 100%; height: 100%; object-fit: cover; }
+.communityRailMore { width: 100%; margin-top: 11px; padding: 8px; border: 0; border-radius: var(--radius-md); background: rgba(221, 36, 118, 0.06); color: var(--accent-pink); font: 600 10px var(--font-primary); cursor: pointer; }
+
+@media screen and (max-width: 1120px) { .communityRail { display: none; } .communityMain { max-width: none; } }
+@media screen and (max-width: 760px) { .communityMain { padding: 20px 14px 40px; } }
